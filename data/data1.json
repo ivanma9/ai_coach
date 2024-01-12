@@ -1,0 +1,69 @@
+{
+	"name": "build_tree",
+	"parameters": {
+		"type": "object",
+		"properties": {
+			"tree": {
+				"type": "object",
+				"description": "The root node of the tree structure.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The value or id of the node."
+					},
+					"isHabit": {
+						"type": "boolean",
+						"description": "A boolean indicating whether the node is a habit (leaf node)."
+					},
+					"children": {
+						"type": "array",
+						"description": "An array of child nodes, each following the same structure as the root.",
+						"items": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"isHabit": {
+									"type": "boolean"
+								},
+								"children": {
+									"type": "array",
+									"items": {
+										"$ref": "#/parameters/tree/properties/children/items"
+									}
+								}
+							},
+							"required": ["id", "isHabit", "children"]
+						}
+					}
+				},
+				"required": ["id", "isHabit", "children"],
+				"example": {
+					"id": "Root",
+					"isHabit": false,
+					"children": [
+						{
+							"id": "Child 1",
+							"isHabit": false,
+							"children": [
+								{
+									"id": "Grandchild 1",
+									"isHabit": true,
+									"children": []
+								}
+							]
+						},
+						{
+							"id": "Child 2",
+							"isHabit": true,
+							"children": []
+						}
+					]
+				}
+			}
+		},
+		"required": ["tree"]
+	},
+	"description": "Builds a tree structure from the provided nested object id."
+}
