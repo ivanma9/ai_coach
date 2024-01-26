@@ -1,11 +1,14 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import AppNavigator from "./AppNavigator";
 import FadeOutComponent from "./components/FadeOutComponent";
 import TreeGraph from "./components/TreeGraph";
 import TreeGraphComponent from "./components/TreeGraphComponent";
 import TreeNode from "./components/TreeNode";
 import json_data from "./data/data1.json";
+import InitialPage from "./pages/InitialPage";
 
 export default function App() {
 	// Build the tree
@@ -35,11 +38,20 @@ export default function App() {
 	// 		});
 	// }, []);
 	const treeGraph = new TreeGraph(parsedData);
-	console.log(treeGraph);
-	// console.log(treeGraph.name)
 	return (
-		<View style={styles.container}>
-			<FadeOutComponent
+		// <NavigationContainer>
+		// 	<AppNavigator />
+		// </NavigationContainer>
+		<View
+			style={{
+				width: windowWidth,
+				height: windowHeight,
+				backgroundColor: "lightyellow",
+				justifyContent: "center",
+			}}
+		>
+			<InitialPage />
+			{/* <FadeOutComponent
 				component={() => (
 					<TreeGraphComponent
 						rootNode={treeGraph.tree}
@@ -48,15 +60,14 @@ export default function App() {
 					/>
 				)}
 				containerWidth={windowWidth}
-			/>
-			<StatusBar style="auto" />
+			/> */}
+			{/* <StatusBar style="auto" /> */}
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
 		backgroundColor: "#fff",
 		alignItems: "center",
 		justifyContent: "center",
