@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Animated, View, Button } from "react-native";
 
-const FadeOutExample = ({ component: Component, containerWidth }) => {
+const FadeOutComponent = ({ component: Component, containerWidth }) => {
 	const fadeAnim = useRef(new Animated.Value(1)).current;
 
 	const fadeOut = () => {
@@ -52,4 +52,4 @@ const styles = {
 	},
 };
 
-export default FadeOutExample;
+export default FadeOutComponent;

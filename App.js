@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
-import FadeOutExample from "./components/InitialPage";
+import FadeOutComponent from "./components/FadeOutComponent";
 import TreeGraph from "./components/TreeGraph";
 import TreeGraphComponent from "./components/TreeGraphComponent";
 import TreeNode from "./components/TreeNode";
@@ -39,7 +39,7 @@ export default function App() {
 	// console.log(treeGraph.name)
 	return (
 		<View style={styles.container}>
-			<FadeOutExample
+			<FadeOutComponent
 				component={() => (
 					<TreeGraphComponent
 						rootNode={treeGraph.tree}
