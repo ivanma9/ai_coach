@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import {
-	View,
-	Image,
-	Text,
-	TextInput,
-	Button,
-	AsyncStorage,
-	StyleSheet,
-} from "react-native";
+import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import icecube from "../assets/Ice_Cube.png";
 
 const InitialPage = ({ navigation }) => {
 	const [firstMessage, setFirstMessage] = useState("");
 
-	const handleNameSubmit = async () => {
-		await AsyncStorage.setItem("firstMessage", firstMessage);
-		navigation.navigate("ChatUI");
+	// const handleMessageSubmit = () => {
+	// 	navigation.navigate("ChatUI");
+	// };
+	const handleMessageSubmit = async () => {
+		try {
+			await AsyncStorage.setItem("firstMessage", firstMessage);
+			console.log("to chat ui");
+			navigation.navigate("ChatUI");
+		} catch (error) {
+			console.error("Error:", error);
+		}
 	};
 
 	return (
@@ -31,7 +32,7 @@ const InitialPage = ({ navigation }) => {
 			<Text style={styles.text}>Literally say anything you want</Text>
 			<Button
 				title="START"
-				onPress={handleNameSubmit}
+				onPress={handleMessageSubmit}
 				color="white"
 				fontSize="1"
 			/>

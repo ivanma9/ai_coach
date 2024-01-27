@@ -39,30 +39,29 @@ export default function App() {
 	// }, []);
 	const treeGraph = new TreeGraph(parsedData);
 	return (
-		// <NavigationContainer>
-		// 	<AppNavigator />
-		// </NavigationContainer>
-		<View
-			style={{
-				width: windowWidth,
-				height: windowHeight,
-				backgroundColor: "lightyellow",
-				justifyContent: "center",
-			}}
-		>
-			<InitialPage />
-			{/* <FadeOutComponent
-				component={() => (
-					<TreeGraphComponent
-						rootNode={treeGraph.tree}
-						containerWidth={windowWidth}
-						containerHeight={windowHeight}
-					/>
-				)}
-				containerWidth={windowWidth}
-			/> */}
-			{/* <StatusBar style="auto" /> */}
-		</View>
+		<NavigationContainer>
+			<AppNavigator />
+		</NavigationContainer>
+		// <View
+		// 	style={{
+		// 		width: windowWidth,
+		// 		height: windowHeight,
+		// 		backgroundColor: "lightyellow",
+		// 		justifyContent: "center",
+		// 	}}
+		// >
+		// 	{/* <FadeOutComponent
+		// 		component={() => (
+		// 			<TreeGraphComponent
+		// 				rootNode={treeGraph.tree}
+		// 				containerWidth={windowWidth}
+		// 				containerHeight={windowHeight}
+		// 			/>
+		// 		)}
+		// 		containerWidth={windowWidth}
+		// 	/> */}
+		// 	{/* <StatusBar style="auto" /> */}
+		// </View>
 	);
 }
 
