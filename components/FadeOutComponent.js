@@ -1,8 +1,24 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, View, Button } from "react-native";
 
 const FadeOutComponent = ({ component: Component, containerWidth }) => {
-	const fadeAnim = useRef(new Animated.Value(1)).current;
+	const fadeAnim = useRef(new Animated.Value(0)).current;
+	const [componentSelected, setComponentSelected] = useState(false);
+	const fadeIn = () => {
+		Animated.timing(fadeAnim, {
+			toValue: 1, //visible
+			duration: 500,
+			useNativeDriver: true,
+		}).start();
+	};
+
+	useEffect(() => {
+		fadeIn();
+	}, []);
+
+	useEffect(() => {
+		fadeOut();
+	}, [componentSelected]);
 
 	const fadeOut = () => {
 		Animated.timing(fadeAnim, {

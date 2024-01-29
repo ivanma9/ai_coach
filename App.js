@@ -15,20 +15,6 @@ export default function App() {
 
 	const windowWidth = useWindowDimensions().width;
 	const windowHeight = useWindowDimensions().height;
-	console.log(windowWidth);
-	console.log(windowHeight);
-
-	let parsedData;
-	try {
-		parsedData = JSON.parse(JSON.stringify(json_data));
-		console.log(parsedData.parameters);
-	} catch (e) {
-		console.error("Error parsing JSON:", e);
-	}
-
-	const childNode = new TreeNode("77", true, []);
-
-	const rootNode = new TreeNode("99", true, [childNode]);
 
 	// useEffect(() => {
 	// 	fetch("/api/tree")
@@ -37,31 +23,12 @@ export default function App() {
 	// 			setAccuracy(data.accuracy);
 	// 		});
 	// }, []);
-	const treeGraph = new TreeGraph(parsedData);
+
 	return (
 		<NavigationContainer>
 			<AppNavigator />
 		</NavigationContainer>
-		// <View
-		// 	style={{
-		// 		width: windowWidth,
-		// 		height: windowHeight,
-		// 		backgroundColor: "lightyellow",
-		// 		justifyContent: "center",
-		// 	}}
-		// >
-		// 	{/* <FadeOutComponent
-		// 		component={() => (
-		// 			<TreeGraphComponent
-		// 				rootNode={treeGraph.tree}
-		// 				containerWidth={windowWidth}
-		// 				containerHeight={windowHeight}
-		// 			/>
-		// 		)}
-		// 		containerWidth={windowWidth}
-		// 	/> */}
 		// 	{/* <StatusBar style="auto" /> */}
-		// </View>
 	);
 }
 

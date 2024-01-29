@@ -9,16 +9,23 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	TouchableOpacity,
+	useWindowDimensions,
 } from "react-native";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FadeOutComponent from "../components/FadeOutComponent";
+import TreeGraphComponent from "../components/TreeGraphComponent";
 
 const ChatUI = () => {
 	// Messages is a log of all messages sent by user and BOT
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [isAtBottom, setIsAtBottom] = useState(true);
+	const [treeDiffFound, setTreeDiffFound] = useState(false);
+
+	const windowWidth = useWindowDimensions().width;
+	const windowHeight = useWindowDimensions().height;
 
 	this.scrollViewRefName = useRef();
 
@@ -50,11 +57,36 @@ const ChatUI = () => {
 			.catch((e) => {
 				console.log("no first message retrieved");
 			});
+
+		// JSON parsedData
+
+		let parsedData;
+		try {
+			parsedData = JSON.parse(JSON.stringify(json_data));
+			console.log(parsedData.parameters);
+		} catch (e) {
+			console.error("Error parsing JSON:", e);
+		}
+		const treeGraph = new TreeGraph(parsedData);
 	}, []);
 
 	useEffect(() => {
 		scrollViewRefName.current.scrollToEnd({ animated: true });
 	}, [currentMessage]); // add Botreponses as a dependency later
+
+	useEffect(() => {
+		if (treeDiffFound) {
+			// // Start the animation
+			// Animated.timing(fadeAnim, {
+			// 	toValue: 1,
+			// 	duration: 500,
+			// 	useNativeDriver: true,
+			// }).start(() => {
+			// After the animation ends, hide the image and reset
+			setTimeout(() => setTreeDiffFound(false), 4000);
+			// });
+		}
+	}, [treeDiffFound]);
 
 	const handleScroll = (event) => {
 		const y = event.nativeEvent.contentOffset.y;
@@ -80,6 +112,10 @@ const ChatUI = () => {
 			timestamp: new Date().toISOString(),
 		};
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+		if (currentMessage.toLowerCase().includes("poke")) {
+			setTreeDiffFound(true);
+		}
 		setCurrentMessage("");
 
 		// Simulate a BOT AI response (replace with actual logic for responses)
@@ -146,6 +182,17 @@ const ChatUI = () => {
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
+			{treeDiffFound && (
+				<FadeOutComponent
+					component={() => (
+						<TreeGraphComponent
+							rootNode={treeGraph.tree}
+							containerWidth={windowWidth}
+							containerHeight={windowHeight}
+						/>
+					)}
+				/>
+			)}
 		</KeyboardAvoidingView>
 	);
 };
