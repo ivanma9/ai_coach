@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
 	View,
 	StyleSheet,
@@ -8,13 +8,19 @@ import {
 	Text,
 	KeyboardAvoidingView,
 	Platform,
+	TouchableOpacity,
 } from "react-native";
+import AntIcon from "react-native-vector-icons/AntDesign";
+import Ionicon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatUI = () => {
 	// Messages is a log of all messages sent by user and BOT
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState("");
+	const [isAtBottom, setIsAtBottom] = useState(true);
+
+	this.scrollViewRefName = useRef();
 
 	useEffect(() => {
 		AsyncStorage.getItem("firstMessage")
@@ -35,7 +41,7 @@ const ChatUI = () => {
 						id: 2, // You can assign a unique ID
 						text: "Bot response", // Replace with your desired bot response
 						sender: "bot",
-					};
+					}; //ALTER TO BOT
 
 					// Add the bot response to messages
 					setMessages((prevMessages) => [...prevMessages, botResponse]);
@@ -45,6 +51,23 @@ const ChatUI = () => {
 				console.log("no first message retrieved");
 			});
 	}, []);
+
+	useEffect(() => {
+		scrollViewRefName.current.scrollToEnd({ animated: true });
+	}, [currentMessage]); // add Botreponses as a dependency later
+
+	const handleScroll = (event) => {
+		const y = event.nativeEvent.contentOffset.y;
+		const contentHeight = event.nativeEvent.contentSize.height;
+		const viewHeight = event.nativeEvent.layoutMeasurement.height;
+		const isAtBottomNow = y >= contentHeight - viewHeight - 50; // Threshold of 50 pixels
+		setIsAtBottom(isAtBottomNow);
+	};
+
+	const scrollToBottom = () => {
+		scrollViewRefName.current.scrollToEnd({ animated: true });
+		setIsAtBottom(true);
+	};
 
 	const sendMessage = () => {
 		if (currentMessage.trim() === "") {
@@ -89,28 +112,41 @@ const ChatUI = () => {
 	);
 
 	return (
-		<View style={styles.container}>
+		<KeyboardAvoidingView style={styles.container}>
 			<FlatList
+				ref={this.scrollViewRefName}
 				data={messages}
 				renderItem={renderMessage}
 				keyExtractor={(item, index) => index.toString()}
 				style={styles.messageList}
+				onScroll={handleScroll}
 			/>
 			<KeyboardAvoidingView
 				keyboardVerticalOffset="100"
 				behavior={Platform.OS === "ios" ? "padding" : "padding"}
 				style={styles.inputContainer}
 			>
-				<TextInput
-					style={styles.input}
-					value={currentMessage}
-					onChangeText={setCurrentMessage}
-					placeholder="Type a message..."
-					placeholderTextColor="gray"
-				/>
-				<Button title="Send" onPress={sendMessage} />
+				<View style={styles.iconDiv}>
+					{!isAtBottom && (
+						<TouchableOpacity style={styles.icon} onPress={scrollToBottom}>
+							<AntIcon name="downcircleo" size={30} color="#FFFFFFAB" />
+						</TouchableOpacity>
+					)}
+				</View>
+				<View style={styles.inputSubContainer}>
+					<TextInput
+						style={styles.input}
+						value={currentMessage}
+						onChangeText={setCurrentMessage}
+						placeholder="Type a message..."
+						placeholderTextColor="gray"
+					/>
+					<TouchableOpacity style={styles.send} onPress={sendMessage}>
+						<Ionicon name={"arrow-up-circle"} size={35} color="#FFFFFFAB" />
+					</TouchableOpacity>
+				</View>
 			</KeyboardAvoidingView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -122,16 +158,23 @@ const styles = StyleSheet.create({
 	},
 	messageList: {
 		flex: 1,
+		paddingBottom: 100,
 		padding: 8,
-		marginVertical: 4,
+		marginVertical: 10,
 		// maxWidth: "80%", // Limit message width
-		backgroundColor: "black",
+		backgroundColor: "light blue",
 		borderRadius: 8,
 	},
 	inputContainer: {
-		flexDirection: "row",
+		marginTop: 10,
 		padding: 10,
 		bottom: 30,
+		left: 0,
+		right: 0,
+		// backgroundColor: "lightyellow", //test
+	},
+	inputSubContainer: {
+		flexDirection: "row",
 	},
 	input: {
 		flex: 1,
@@ -139,19 +182,33 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		marginRight: 10,
 		borderRadius: 5,
-		padding: 10,
+		padding: 7,
 		paddingVertical: 8,
 		paddingHorizontal: 16,
-		// width: "70%",
+		backgroundColor: "black",
 		height: 40,
 		color: "white",
 	},
 	message: {
+		flex: 1,
 		padding: 10,
-		borderRadius: 50,
+		borderRadius: 30,
 		borderWidth: 2,
 		borderColor: "white",
-		margin: 5,
+		marginBottom: 10,
+	},
+	iconDiv: {
+		position: "relative",
+		paddingBottom: 8,
+	},
+	icon: {
+		position: "absolute",
+		zIndex: 1,
+		bottom: 10,
+		right: "50%",
+	},
+	send: {
+		justifyContent: "center",
 	},
 });
 
