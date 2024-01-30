@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	View,
 	StyleSheet,
 	TextInput,
-	Button,
 	FlatList,
 	Text,
 	KeyboardAvoidingView,
@@ -16,6 +15,8 @@ import Ionicon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FadeOutComponent from "../components/FadeOutComponent";
 import TreeGraphComponent from "../components/TreeGraphComponent";
+import TreeGraph from "../components/TreeGraph";
+import json_data from "../data/data2.json";
 
 const ChatUI = () => {
 	// Messages is a log of all messages sent by user and BOT
@@ -23,6 +24,7 @@ const ChatUI = () => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [isAtBottom, setIsAtBottom] = useState(true);
 	const [treeDiffFound, setTreeDiffFound] = useState(false);
+	const [treeGraph, setTreeGraph] = useState(null);
 
 	const windowWidth = useWindowDimensions().width;
 	const windowHeight = useWindowDimensions().height;
@@ -42,7 +44,7 @@ const ChatUI = () => {
 				// Add the user message as the first message in messages
 				setMessages([userMessage]);
 
-				// Simulate a bot response after a delay
+				// Simulate a FIRST bot response after a delay
 				setTimeout(() => {
 					const botResponse = {
 						id: 2, // You can assign a unique ID
@@ -67,26 +69,32 @@ const ChatUI = () => {
 		} catch (e) {
 			console.error("Error parsing JSON:", e);
 		}
-		const treeGraph = new TreeGraph(parsedData);
+		console.log(JSON.stringify(parsedData));
+		// setMessages((prevMessages) => [...prevMessages, newMessage]);
+		try {
+			setTreeGraph(() => new TreeGraph(parsedData));
+		} catch (e) {
+			console.log("Baddie:", e);
+		}
+		if (treeGraph != null) {
+			console.log(treeGraph.name);
+		} else {
+			console.log("null???");
+		}
 	}, []);
 
 	useEffect(() => {
-		scrollViewRefName.current.scrollToEnd({ animated: true });
-	}, [currentMessage]); // add Botreponses as a dependency later
+		console.log("treeGraph has changed:", treeGraph);
+		// time to trigger Tree Fade
+	}, [treeGraph]);
 
 	useEffect(() => {
-		if (treeDiffFound) {
-			// // Start the animation
-			// Animated.timing(fadeAnim, {
-			// 	toValue: 1,
-			// 	duration: 500,
-			// 	useNativeDriver: true,
-			// }).start(() => {
-			// After the animation ends, hide the image and reset
-			setTimeout(() => setTreeDiffFound(false), 4000);
-			// });
-		}
-	}, [treeDiffFound]);
+		scrollToBottom();
+	}, [currentMessage, messages]); // add Botreponses as a dependency later
+
+	const onFadeComplete = () => {
+		setTreeDiffFound(false);
+	};
 
 	const handleScroll = (event) => {
 		const y = event.nativeEvent.contentOffset.y;
@@ -97,7 +105,7 @@ const ChatUI = () => {
 	};
 
 	const scrollToBottom = () => {
-		scrollViewRefName.current.scrollToEnd({ animated: true });
+		scrollViewRefName.current.scrollToEnd();
 		setIsAtBottom(true);
 	};
 
@@ -119,6 +127,7 @@ const ChatUI = () => {
 		setCurrentMessage("");
 
 		// Simulate a BOT AI response (replace with actual logic for responses)
+		// TODO: Add AIBOT response
 		setTimeout(() => {
 			const responseMessage = {
 				id: messages.length + 2,
@@ -148,7 +157,7 @@ const ChatUI = () => {
 	);
 
 	return (
-		<KeyboardAvoidingView style={styles.container}>
+		<View style={styles.container}>
 			<FlatList
 				ref={this.scrollViewRefName}
 				data={messages}
@@ -158,7 +167,7 @@ const ChatUI = () => {
 				onScroll={handleScroll}
 			/>
 			<KeyboardAvoidingView
-				keyboardVerticalOffset="100"
+				keyboardVerticalOffset={100}
 				behavior={Platform.OS === "ios" ? "padding" : "padding"}
 				style={styles.inputContainer}
 			>
@@ -176,6 +185,7 @@ const ChatUI = () => {
 						onChangeText={setCurrentMessage}
 						placeholder="Type a message..."
 						placeholderTextColor="gray"
+						onTextInput={scrollToBottom}
 					/>
 					<TouchableOpacity style={styles.send} onPress={sendMessage}>
 						<Ionicon name={"arrow-up-circle"} size={35} color="#FFFFFFAB" />
@@ -183,17 +193,20 @@ const ChatUI = () => {
 				</View>
 			</KeyboardAvoidingView>
 			{treeDiffFound && (
-				<FadeOutComponent
-					component={() => (
-						<TreeGraphComponent
-							rootNode={treeGraph.tree}
-							containerWidth={windowWidth}
-							containerHeight={windowHeight}
-						/>
-					)}
-				/>
+				<View style={styles.treeDiffContainer}>
+					<FadeOutComponent
+						component={() => (
+							<TreeGraphComponent
+								rootNode={treeGraph.tree}
+								containerWidth={windowWidth}
+								containerHeight={windowHeight}
+							/>
+						)}
+						onFadeComplete={onFadeComplete}
+					/>
+				</View>
 			)}
-		</KeyboardAvoidingView>
+		</View>
 	);
 };
 
@@ -256,6 +269,14 @@ const styles = StyleSheet.create({
 	},
 	send: {
 		justifyContent: "center",
+	},
+	treeDiffContainer: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		// zIndex: 2, // Ensure it's above other components
 	},
 });
 

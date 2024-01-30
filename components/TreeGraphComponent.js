@@ -21,14 +21,14 @@ const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
 							const childY = y + 100; // Vertical spacing
 
 							return (
-								<G key={child.id}>
+								<G key={child.data}>
 									{/* Line connecting to the child node */}
 									<Line
 										x1={x}
 										y1={y + radius}
 										x2={childX}
-										y2={childY}
-										stroke="black"
+										y2={childY - radius}
+										stroke="white"
 									/>
 
 									{/* Recursive call for the child node */}
@@ -43,7 +43,11 @@ const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
 
 	return (
 		<Svg style={{ width: containerWidth, height: containerHeight }}>
-			<G>{renderTree(rootNode, containerWidth / 2, containerHeight / 3, 0)}</G>
+			{rootNode && (
+				<G>
+					{renderTree(rootNode, containerWidth / 2, containerHeight / 6, 0)}
+				</G>
+			)}
 		</Svg>
 	);
 };

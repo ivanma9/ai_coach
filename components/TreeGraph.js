@@ -3,16 +3,16 @@ import TreeNode from "./TreeNode";
 class TreeGraph {
 	constructor(jsonData) {
 		this.tree = this.buildTree(jsonData);
-		this.name = "Heyyy";
+		this.name = "Tree Graph Name";
 	}
 
 	buildTree(jsonData) {
 		// Inner function to recursively build nodes
 		const buildNode = (nodeData) => {
-			const { id, isHabit, children } = nodeData;
-			console.log(id)
+			const { data, isHabit, children } = nodeData;
+			console.log(data);
 			const childNodes = children ? children.map(buildNode) : []; // Handle children if they exist
-			return new TreeNode(id, isHabit, childNodes);
+			return new TreeNode(data, isHabit, childNodes);
 		};
 
 		// Assuming jsonData has the structure with a 'parameters' object containing 'tree'

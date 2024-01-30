@@ -40,24 +40,45 @@
 				},
 				"required": ["data", "isHabit", "children"],
 				"example": {
-					"data": "Root",
+					"data": "Self-Improvement",
 					"isHabit": false,
 					"children": [
 						{
-							"data": "Child 1",
+							"data": "Develop a Startup",
 							"isHabit": false,
 							"children": [
 								{
-									"data": "Grandchild 1",
+									"data": "Work on startup for 3 hours daily",
+									"isHabit": true,
+									"children": []
+								},
+								{
+									"data": "Grade progress weekly",
 									"isHabit": true,
 									"children": []
 								}
 							]
 						},
 						{
-							"data": "Child 2",
-							"isHabit": true,
-							"children": []
+							"data": "Improve Health",
+							"isHabit": false,
+							"children": [
+								{
+									"data": "Improve Sleep quality",
+									"isHabit": true,
+									"children": []
+								},
+								{
+									"data": "improve cardio vascular health",
+									"isHabit": true,
+									"children": []
+								},
+								{
+									"data": "improve diet",
+									"isHabit": true,
+									"children": []
+								}
+							]
 						}
 					]
 				}

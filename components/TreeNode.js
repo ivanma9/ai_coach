@@ -1,6 +1,6 @@
 class TreeNode {
-	constructor(id, isHabit, children = []) {
-		this.id = id;
+	constructor(data, isHabit, children = []) {
+		this.data = data;
 		this.isHabit = isHabit;
 		this.children = children;
 	}
