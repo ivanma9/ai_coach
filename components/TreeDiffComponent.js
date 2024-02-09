@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import FadeOutComponent from "./FadeOutComponent";
 import TreeGraphComponent from "./TreeGraphComponent";
+import TreeMapComponent from "./TreeMapComponent";
 
 const TreeDiffComponent = ({ route, navigation }) => {
-	const { treeGraphs } = route.params;
+	const { treeGraphs, newNodes } = route.params;
 	const [currentTreeIndex, setCurrentTreeIndex] = useState(0);
 
 	const windowWidth = useWindowDimensions().width;
 	const windowHeight = useWindowDimensions().height;
+	console.log(windowWidth);
+	console.log(windowHeight);
 
 	const onFadeComplete = () => {
 		console.log("CurrentTreeIndex: ", currentTreeIndex);
@@ -32,10 +35,16 @@ const TreeDiffComponent = ({ route, navigation }) => {
 				key={currentTreeIndex}
 				index={currentTreeIndex}
 				component={() => (
-					<TreeGraphComponent
+					// <TreeGraphComponent
+					// 	rootNode={treeGraphs[currentTreeIndex]}
+					// 	containerWidth={windowWidth}
+					// 	containerHeight={windowHeight}
+					// />
+					<TreeMapComponent
 						rootNode={treeGraphs[currentTreeIndex]}
 						containerWidth={windowWidth}
 						containerHeight={windowHeight}
+						newNodes={newNodes}
 					/>
 				)}
 				onFadeComplete={onFadeComplete}

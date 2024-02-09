@@ -1,19 +1,21 @@
 import TreeNode from "../components/TreeNode";
 
+const newNodesFromNode2: String[] = [];
+
 const addChildrenToStack = (node1, node2) => {
 	let stack: TreeNode[][] = [[]];
 
 	const children1: TreeNode[] = node1?.children || [];
 	const children2: TreeNode[] = node2?.children || [];
-	const matchedChildren1 = new Set<TreeNode>();
 	for (let child of children2) {
 		const matchingChild = children1.find((c) => c.data === child.data);
 		if (matchingChild) {
 			stack.push([matchingChild, child]);
-			matchedChildren1.add(matchingChild);
 		} else {
 			// found in children2 not included in children1
 			stack.push([null, child]);
+			console.log("NEW CHILD======================>", child.data);
+			newNodesFromNode2.push(child.data);
 		}
 	}
 	return stack;
@@ -26,6 +28,7 @@ export const getTreeDiff = (tree1: TreeNode, tree2: TreeNode): TreeNode[] => {
 	while (stack.length > 0) {
 		const [node1, node2] = stack.pop();
 		console.log("WHILE");
+		// Both trees are null
 		if (node1 == null && node2 == null) {
 			console.log("NULLIFIED");
 			continue;
@@ -44,6 +47,7 @@ export const getTreeDiff = (tree1: TreeNode, tree2: TreeNode): TreeNode[] => {
 				// Different number of children means they're different
 				console.log("Different number of children immedately there is diff");
 				diffNodes.push(node2);
+				stack.push(...addChildrenToStack(node1, node2));
 			} else {
 				console.log(
 					"Same number of children, but now we have to compare on next level"
@@ -55,5 +59,16 @@ export const getTreeDiff = (tree1: TreeNode, tree2: TreeNode): TreeNode[] => {
 			}
 		}
 	}
-	return diffNodes;
+	return [...new Set(diffNodes)];
+};
+
+export const getNewTreeNodes = (): String[] => {
+	return newNodesFromNode2;
+};
+export const findDiffAndNewNodes = (tree1: TreeNode, tree2: TreeNode) => {
+	const diffs = getTreeDiff(tree1, tree2);
+	const newNodes = getNewTreeNodes();
+	console.log("diff function new ndoes len", newNodes.length);
+	//arguably going to change this to only return newNodes
+	return [diffs, newNodes];
 };

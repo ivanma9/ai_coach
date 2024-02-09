@@ -20,7 +20,7 @@ import TreeGraph from "../components/TreeGraph";
 import TreeNode from "../components/TreeNode";
 import json_data1 from "../data/data4.json";
 import json_data2 from "../data/data3.json";
-import { getTreeDiff } from "../helpers/getTreeDiff";
+import { getTreeDiff, findDiffAndNewNodes } from "../helpers/getTreeDiff";
 import { getDataFromLocal } from "../helpers/getDataFromLocal";
 import {
 	COLORS,
@@ -47,6 +47,7 @@ const ChatUI = ({ navigation }) => {
 	]);
 	// add a init node or treeJsonData
 	const [botTextData, setBotTextData] = useState("");
+	const [newTreeNodes, setNewTreeNodes] = useState([]);
 
 	this.scrollViewRefName = useRef();
 
@@ -149,8 +150,10 @@ const ChatUI = ({ navigation }) => {
 		if (treeDiffFound) {
 			navigation.navigate("TreeDiff", {
 				treeGraphs: treeGraphs,
+				newNodes: newTreeNodes,
 			});
 			setTreeDiffFound(false);
+			setNewTreeNodes([]);
 		}
 		// if (!treeDiffFound && shouldBotRespond) {
 		// 	console.log("Starting Time ---------");
@@ -249,7 +252,19 @@ const ChatUI = ({ navigation }) => {
 				const newTreeGraph = new TreeGraph(updatedTreeJsonData[1]);
 
 				// List of TreeNode tree diffs
-				const treeDiffs = getTreeDiff(currentTreeGraph.tree, newTreeGraph.tree);
+				const [treeDiffs, newNodes] = findDiffAndNewNodes(
+					currentTreeGraph.tree,
+					newTreeGraph.tree
+				);
+
+				console.log("---NEW NODES----", newNodes.length);
+				newNodes.forEach((data) => {
+					console.log(data);
+				});
+
+				setNewTreeNodes(newNodes);
+
+				// const treeDiffs = getTreeDiff(currentTreeGraph.tree, newTreeGraph.tree);
 				setTreeJsonData(updatedTreeJsonData);
 
 				console.log("diff");

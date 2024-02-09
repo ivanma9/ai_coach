@@ -1,10 +1,16 @@
 import React from "react";
 import Svg, { G, Line } from "react-native-svg";
+import { TREE_NODE } from "../helpers/constants";
 import TreeNodeComponent from "./TreeNodeComponent";
 
-const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
+const TreeGraphComponent = ({
+	rootNode,
+	containerWidth,
+	containerHeight,
+	newNodes,
+}) => {
 	const calculateTreeLayout = (rootNode, containerWidth, containerHeight) => {
-		const levelHeight = 200;
+		const levelHeight = 400;
 		const nodeRadius = 50;
 		const positions = new Map();
 
@@ -20,7 +26,8 @@ const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
 			positions.set(node, { x, y });
 
 			// Calculate horizontal spacing based on the level
-			let horizontalSpacing = containerWidth / Math.pow(3, level + 1);
+			let horizontalSpacing =
+				containerWidth / Math.pow(TREE_NODE.SPREAD, level + 1);
 
 			// Queue children for the next level
 			node.children.forEach((child, index) => {
@@ -45,7 +52,13 @@ const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
 		<Svg style={{ width: containerWidth, height: containerHeight }}>
 			{[...positions].map(([node, { x, y }]) => (
 				<G key={node.data}>
-					<TreeNodeComponent node={node} x={x} y={y} radius={20} />
+					<TreeNodeComponent
+						newNodes={newNodes}
+						node={node}
+						x={x}
+						y={y}
+						radius={20}
+					/>
 					{node.children.map((child) => (
 						<Line
 							key={child.data}

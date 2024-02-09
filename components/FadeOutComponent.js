@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View, TouchableOpacity, Text, Keyboard } from "react-native";
-import { TREE_DELAY } from "../helpers/constants";
+import { TREE_DELAY, COLORS } from "../helpers/constants";
+import Ionicon from "react-native-vector-icons/Ionicons";
 
 const FadeOutComponent = ({
 	component: Component,
@@ -42,27 +43,36 @@ const FadeOutComponent = ({
 
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity onPress={fadeOut} activeOpacity={1}>
-				<Animated.View
-					style={{
-						opacity: fadeAnim,
-						flex: 1,
-						backgroundColor: "rgba(0,0,0,0.8)",
-					}}
-				>
-					<Component />
-				</Animated.View>
-				<Text
-					style={{
-						color: "white",
-						position: "absolute",
-						bottom: 50,
-						right: 80,
-						fontSize: 30,
-					}}
-				>
-					Tree {index}
-				</Text>
+			<Animated.View
+				style={{
+					opacity: fadeAnim,
+					flex: 1,
+					backgroundColor: "rgba(0,0,0,0.8)",
+				}}
+			>
+				<Component />
+			</Animated.View>
+			<Text
+				style={{
+					color: "white",
+					position: "absolute",
+					bottom: 50,
+					right: 80,
+					fontSize: 30,
+				}}
+			>
+				Tree {index}
+			</Text>
+			<TouchableOpacity
+				onPress={fadeOut}
+				style={styles.returnButton}
+				activeOpacity={1}
+			>
+				<Ionicon
+					name={"chevron-back-circle-outline"}
+					size={50}
+					color={COLORS.ICON_COLOR}
+				/>
 			</TouchableOpacity>
 		</View>
 	);
@@ -75,6 +85,12 @@ const styles = {
 		flex: 1,
 		alignItems: "center",
 		// zIndex: 2,
+	},
+	returnButton: {
+		position: "absolute",
+		bottom: 15,
+		left: 15,
+		zIndex: 3,
 	},
 };
 

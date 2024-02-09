@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Svg, { Circle, G, Rect, Text as SvgText } from "react-native-svg";
 import { TREE_NODE } from "../helpers/constants";
 
-const TreeNodeComponent = ({ node, x, y }) => {
+const TreeNodeComponent = ({ node, x, y, newNodes }) => {
 	const [textWidth, setTextWidth] = useState(0);
 	const nodeData = node ? node.data : "Undefined";
 
@@ -10,6 +10,16 @@ const TreeNodeComponent = ({ node, x, y }) => {
 	// We use it to set the width of the text
 	const handleTextLayout = (e) => {
 		setTextWidth(e.nativeEvent.layout.width);
+	};
+
+	const isNewNode = (node_data) => {
+		const newNode = newNodes.find((data) => data === node_data);
+		if (newNode) {
+			console.log("found going GREEN");
+			return TREE_NODE.COLOR_NEW_NODE;
+		}
+		console.log("not found going BLUE");
+		return TREE_NODE.COLOR;
 	};
 
 	// Calculate the width of the rectangle based on the text width
@@ -37,7 +47,7 @@ const TreeNodeComponent = ({ node, x, y }) => {
 				r={50}
 				stroke="white"
 				strokeWidth="1"
-				fill={TREE_NODE.COLOR}
+				fill={isNewNode(nodeData)}
 			/>
 			{/* Text element for the node */}
 			<SvgText
