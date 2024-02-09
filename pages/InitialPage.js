@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import icecube from "../assets/Ice_Cube.png";
+import TreeNode from "../components/TreeNode";
 
 const InitialPage = ({ navigation }) => {
 	const [firstMessage, setFirstMessage] = useState("");
 
-	// const handleMessageSubmit = () => {
-	// 	navigation.navigate("ChatUI");
-	// };
 	const handleMessageSubmit = async () => {
 		try {
-			await AsyncStorage.setItem("firstMessage", firstMessage);
+			treeGraph = await AsyncStorage.setItem("firstMessage", firstMessage);
 			console.log("to chat ui");
 			navigation.navigate("ChatUI");
 		} catch (error) {

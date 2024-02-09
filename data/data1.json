@@ -11,10 +11,6 @@
 						"type": "string",
 						"description": "The value or data of the node."
 					},
-					"isHabit": {
-						"type": "boolean",
-						"description": "A boolean indicating whether the node is a habit (leaf node)."
-					},
 					"children": {
 						"type": "array",
 						"description": "An array of child nodes, each following the same structure as the root.",
@@ -23,9 +19,6 @@
 							"properties": {
 								"data": {
 									"type": "string"
-								},
-								"isHabit": {
-									"type": "boolean"
 								},
 								"children": {
 									"type": "array",
@@ -41,22 +34,18 @@
 				"required": ["data", "isHabit", "children"],
 				"example": {
 					"data": "Root",
-					"isHabit": false,
 					"children": [
 						{
 							"data": "Child 1",
-							"isHabit": false,
 							"children": [
 								{
 									"data": "Grandchild 1",
-									"isHabit": true,
 									"children": []
 								}
 							]
 						},
 						{
 							"data": "Child 2",
-							"isHabit": true,
 							"children": []
 						}
 					]

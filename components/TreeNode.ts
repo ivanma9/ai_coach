@@ -1,7 +1,9 @@
 class TreeNode {
-	constructor(data, isHabit, children = []) {
+	data: string;
+	children: TreeNode[];
+
+	constructor(data: string, children: TreeNode[] = []) {
 		this.data = data;
-		this.isHabit = isHabit;
 		this.children = children;
 	}
 }

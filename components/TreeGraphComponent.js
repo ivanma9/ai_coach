@@ -3,51 +3,61 @@ import Svg, { G, Line } from "react-native-svg";
 import TreeNodeComponent from "./TreeNodeComponent";
 
 const TreeGraphComponent = ({ rootNode, containerWidth, containerHeight }) => {
-	const renderTree = (node, x, y, level) => {
-		const horizontalSpacing = containerWidth / 4;
-		const children = node.children;
-		const radius = 20; // Same radius as in TreeNodeComponent
+	const calculateTreeLayout = (rootNode, containerWidth, containerHeight) => {
+		const levelHeight = 200;
+		const nodeRadius = 50;
+		const positions = new Map();
 
-		return (
-			<G key={node.id}>
-				{/* Render the current node */}
-				<TreeNodeComponent node={node} x={x} y={y} radius={radius} />
+		// Start BFS from the root node
+		let queue = [
+			{ node: rootNode, x: containerWidth / 2, y: nodeRadius, level: 0 },
+		];
 
-				{/* Recursively render children nodes */}
-				{children.length > 0
-					? children.map((child, index) => {
-							const childX =
-								x + (index - children.length / 2) * horizontalSpacing;
-							const childY = y + 100; // Vertical spacing
+		while (queue.length > 0) {
+			let { node, x, y, level } = queue.shift();
 
-							return (
-								<G key={child.data}>
-									{/* Line connecting to the child node */}
-									<Line
-										x1={x}
-										y1={y + radius}
-										x2={childX}
-										y2={childY - radius}
-										stroke="white"
-									/>
+			// Store the position for the current node
+			positions.set(node, { x, y });
 
-									{/* Recursive call for the child node */}
-									{renderTree(child, childX, childY, level + 1)}
-								</G>
-							);
-					  })
-					: console.log("no children")}
-			</G>
-		);
+			// Calculate horizontal spacing based on the level
+			let horizontalSpacing = containerWidth / Math.pow(3, level + 1);
+
+			// Queue children for the next level
+			node.children.forEach((child, index) => {
+				let childX =
+					x -
+					(horizontalSpacing * (node.children.length - 1)) / 2 +
+					horizontalSpacing * index;
+				let childY = y + levelHeight;
+				queue.push({ node: child, x: childX, y: childY, level: level + 1 });
+			});
+		}
+
+		return positions;
 	};
 
+	const positions = calculateTreeLayout(
+		rootNode,
+		containerWidth,
+		containerHeight
+	);
 	return (
 		<Svg style={{ width: containerWidth, height: containerHeight }}>
-			{rootNode && (
-				<G>
-					{renderTree(rootNode, containerWidth / 2, containerHeight / 6, 0)}
+			{[...positions].map(([node, { x, y }]) => (
+				<G key={node.data}>
+					<TreeNodeComponent node={node} x={x} y={y} radius={20} />
+					{node.children.map((child) => (
+						<Line
+							key={child.data}
+							x1={x}
+							y1={y + 50}
+							x2={positions.get(child).x}
+							y2={positions.get(child).y - 50}
+							stroke="#FFFFFF56"
+						/>
+					))}
 				</G>
-			)}
+			))}
 		</Svg>
 	);
 };

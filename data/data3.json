@@ -1,0 +1,22 @@
+{
+	"data": "Self-Improvement",
+	"children": [
+		{
+			"data": "Develop a Startup",
+			"children": [
+				{
+					"data": "Work on startup for 3 hours daily",
+					"children": []
+				},
+				{
+					"data": "Grade progress weekly",
+					"children": []
+				}
+			]
+		},
+		{
+			"data": "Improve Health",
+			"children": []
+		}
+	]
+}
