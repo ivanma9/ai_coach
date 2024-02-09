@@ -22,4 +22,10 @@ const TREE_MAP = {
 
 const ROOT_NODE_DATA = "Self-Improvement";
 
+const MESSAGE_TYPES = {
+	TEXT: "text",
+	IMAGE: "image",
+	POLL: "poll", // Example of an interactive component
+};
+
 export { TREE_DELAY, COLORS, BOT_DELAY, TREE_NODE, ROOT_NODE_DATA, TREE_MAP };
