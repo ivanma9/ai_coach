@@ -37,10 +37,6 @@ const TreeMapComponent = ({
 					height: TREE_MAP.CONTENT_HEIGHT,
 				}}
 			>
-				{/* <Image
-					onLayout={console.log("IMAGE MOUNT")}
-					source={require("../assets/Ice_Cube.png")}
-				/> */}
 				<TreeGraphComponent
 					rootNode={rootNode}
 					containerWidth={TREE_MAP.CONTENT_WIDTH}

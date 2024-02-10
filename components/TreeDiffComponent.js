@@ -20,8 +20,7 @@ const TreeDiffComponent = ({ route, navigation }) => {
 		} else {
 			console.log("RESET ...");
 			setCurrentTreeIndex(0);
-			// navigation.navigate("ChatUI");
-			// un comment
+			navigation.navigate("ChatUI");
 		}
 	};
 
@@ -35,11 +34,6 @@ const TreeDiffComponent = ({ route, navigation }) => {
 				key={currentTreeIndex}
 				index={currentTreeIndex}
 				component={() => (
-					// <TreeGraphComponent
-					// 	rootNode={treeGraphs[currentTreeIndex]}
-					// 	containerWidth={windowWidth}
-					// 	containerHeight={windowHeight}
-					// />
 					<TreeMapComponent
 						rootNode={treeGraphs[currentTreeIndex]}
 						containerWidth={windowWidth}

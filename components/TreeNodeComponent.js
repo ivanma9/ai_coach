@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Svg, { Circle, G, Rect, Text as SvgText } from "react-native-svg";
-import { TREE_NODE } from "../helpers/constants";
+import { COLORS, TREE_NODE } from "../helpers/constants";
 
 const TreeNodeComponent = ({ node, x, y, newNodes }) => {
 	const [textWidth, setTextWidth] = useState(0);
@@ -13,21 +13,21 @@ const TreeNodeComponent = ({ node, x, y, newNodes }) => {
 	};
 
 	const isNewNode = (node_data) => {
-		const newNode = newNodes.find((data) => data === node_data);
-		if (newNode) {
-			console.log("found going GREEN");
-			return TREE_NODE.COLOR_NEW_NODE;
+		if (node_data !== "Undefined") {
+			const newNode = newNodes.find((data) => data === node_data);
+			if (newNode) {
+				return COLORS.NEW_NODE;
+			}
+			return COLORS.TREE_NODE;
 		}
-		console.log("not found going BLUE");
-		return TREE_NODE.COLOR;
 	};
 
 	// Calculate the width of the rectangle based on the text width
 	// Add some padding to ensure the text fits within the rectangle
 	const padding = 20; // 10 padding on each side
-	const rectangleWidth = textWidth + padding;
-	const rectangleHeight = TREE_NODE.HEIGHT; // Fixed height for all nodes
-	const cornerRadius = TREE_NODE.WIDTH; // Corner radius for the rounded rectangle
+	// const rectangleWidth = textWidth + padding;
+	// const rectangleHeight = TREE_NODE.HEIGHT; // Fixed height for all nodes
+	// const cornerRadius = TREE_NODE.WIDTH; // Corner radius for the rounded rectangle
 
 	return (
 		<G>
@@ -49,7 +49,6 @@ const TreeNodeComponent = ({ node, x, y, newNodes }) => {
 				strokeWidth="1"
 				fill={isNewNode(nodeData)}
 			/>
-			{/* Text element for the node */}
 			<SvgText
 				x={x}
 				y={y}

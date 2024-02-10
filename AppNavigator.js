@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import InitialPage from "./pages/InitialPage"; // Update with the correct path
 import ChatUI from "./pages/ChatUI"; // Update with the correct path
@@ -7,7 +8,7 @@ import TreeDiffComponent from "./components/TreeDiffComponent";
 
 const Stack = createNativeStackNavigator();
 
-function AppNavigator() {
+function AppNavigator({ navigation }) {
 	return (
 		<Stack.Navigator initialRouteName="InitialPage">
 			<Stack.Screen
@@ -25,11 +26,32 @@ function AppNavigator() {
 					},
 					headerTintColor: "white",
 					headerBackVisible: false,
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.navigate("HabitDeckPage")}
+							title="Next"
+							color="#fff"
+						/>
+					),
 				}}
 				component={ChatUI}
 			/>
 			<Stack.Screen
 				name="TreeDiff"
+				options={{
+					title: "New changes",
+					headerMode: "float",
+					headerShadowVisible: "true",
+					headerStyle: {
+						backgroundColor: "black",
+					},
+					headerTintColor: "white",
+					headerBackVisible: false,
+				}}
+				component={TreeDiffComponent}
+			/>
+			<Stack.Screen
+				name="HabitDeckPage"
 				options={{
 					title: "New changes",
 					headerMode: "float",

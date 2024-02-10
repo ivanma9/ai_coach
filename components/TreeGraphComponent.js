@@ -1,6 +1,6 @@
 import React from "react";
 import Svg, { G, Line } from "react-native-svg";
-import { TREE_NODE } from "../helpers/constants";
+import { COLORS, TREE_NODE } from "../helpers/constants";
 import TreeNodeComponent from "./TreeNodeComponent";
 
 const TreeGraphComponent = ({
@@ -66,7 +66,7 @@ const TreeGraphComponent = ({
 							y1={y + 50}
 							x2={positions.get(child).x}
 							y2={positions.get(child).y - 50}
-							stroke="#FFFFFF56"
+							stroke={COLORS.LINE_STROKE}
 						/>
 					))}
 				</G>
