@@ -22,6 +22,7 @@ import json_data1 from "../data/data4.json";
 import json_data2 from "../data/data3.json";
 import { getTreeDiff, findDiffAndNewNodes } from "../helpers/getTreeDiff";
 import { getDataFromLocal } from "../helpers/getDataFromLocal";
+import { getHabits } from "../helpers/getHabits";
 import {
 	COLORS,
 	TREE_DELAY,
@@ -39,6 +40,7 @@ const ChatUI = ({ navigation }) => {
 	const [treeGraphs, setTreeGraphs] = useState([
 		new TreeNode(ROOT_NODE_DATA, []),
 	]);
+	const [habits, setHabits] = useState([]);
 	const [shouldBotRespond, setShouldBotRespond] = useState(false);
 	// treeJsonData[current, new]
 	const [treeJsonData, setTreeJsonData] = useState([
@@ -53,6 +55,7 @@ const ChatUI = ({ navigation }) => {
 
 	useEffect(() => {
 		console.log("INITIAL MOUNT.....");
+		setHabits([]);
 
 		AsyncStorage.getItem("firstMessage")
 			.then((firstMessage) => {
@@ -168,14 +171,17 @@ const ChatUI = ({ navigation }) => {
 		// }
 	}, [treeDiffFound, navigation]);
 
-	// const createTreeGraphs = () => {
-	// 	try {
-	// 		setTreeGraphs(() => [new TreeNode(ROOT_NODE_DATA, [])]);
-	// 		setTreeDiffFound(true); // Triggers animation of Fade Tree
-	// 	} catch (e) {
-	// 		console.log("bad Data:", e);
-	// 	}
-	// };
+	useEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<TouchableOpacity
+					onPress={() => navigation.push("HabitDeckPage", { habits: habits })}
+				>
+					<Text style={{ color: COLORS.TEXT }}>Next</Text>
+				</TouchableOpacity>
+			),
+		});
+	}, [habits]);
 
 	const handleScroll = (event) => {
 		const y = event.nativeEvent.contentOffset.y;
@@ -251,6 +257,9 @@ const ChatUI = ({ navigation }) => {
 				const currentTreeGraph = new TreeGraph(updatedTreeJsonData[0]);
 				const newTreeGraph = new TreeGraph(updatedTreeJsonData[1]);
 
+				// Compute habits from newTreeGraph
+				setHabits(getHabits(newTreeGraph.tree));
+
 				// List of TreeNode tree diffs
 				const [treeDiffs, newNodes] = findDiffAndNewNodes(
 					currentTreeGraph.tree,
@@ -282,8 +291,13 @@ const ChatUI = ({ navigation }) => {
 					setTreeDiffFound(true); // Triggers animation of Fade Tree
 					// setShouldBotRespond(true); // Ensures bot should respond after treeDiffFound is False
 				}
+			} else {
+				console.error("No Tree found from server");
 			}
 			if (data.response) setBotTextData(data.response);
+			else {
+				console.error("No response text found from server");
+			}
 		} catch (error) {
 			console.error("There was a problem fetching the message:", error);
 			setBotTextData(
@@ -313,11 +327,16 @@ const ChatUI = ({ navigation }) => {
 				styles.message,
 				{
 					alignSelf: item.sender === "user" ? "flex-end" : "flex-start",
-					backgroundColor: item.sender === "user" ? "#FFF" : "#000",
+					backgroundColor:
+						item.sender === "user" ? COLORS.USER_BUBBLE : COLORS.SURFACE,
 				},
 			]}
 		>
-			<Text style={{ color: item.sender === "user" ? "#000" : "#FFF" }}>
+			<Text
+				style={{
+					color: item.sender === "user" ? COLORS.USER_TEXT : COLORS.TEXT,
+				}}
+			>
 				{item.text}
 			</Text>
 		</View>
@@ -341,7 +360,7 @@ const ChatUI = ({ navigation }) => {
 				<View style={styles.iconDiv}>
 					{!isAtBottom && (
 						<TouchableOpacity style={styles.icon} onPress={scrollToBottom}>
-							<AntIcon name="downcircleo" size={30} color="#FFFFFFAB" />
+							<AntIcon name="downcircleo" size={30} color={COLORS.ICON_COLOR} />
 						</TouchableOpacity>
 					)}
 				</View>
@@ -440,15 +459,13 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 16,
-		backgroundColor: "black",
+		backgroundColor: COLORS.BACKGROUND,
 	},
 	messageList: {
 		flex: 1,
 		paddingBottom: 100,
 		padding: 8,
 		marginVertical: 10,
-		// maxWidth: "80%", // Limit message width
-		backgroundColor: "light blue",
 		borderRadius: 8,
 	},
 	inputContainer: {
@@ -464,23 +481,23 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 1,
-		borderColor: "gray",
+		borderColor: COLORS.FEINT_LINES,
 		borderWidth: 1,
 		marginRight: 10,
 		borderRadius: 5,
 		padding: 7,
 		paddingVertical: 8,
 		paddingHorizontal: 16,
-		backgroundColor: "black",
+		backgroundColor: COLORS.BACKGROUND,
 		height: 40,
-		color: "white",
+		color: COLORS.TEXT,
 	},
 	message: {
 		flex: 1,
 		padding: 10,
 		borderRadius: 30,
 		borderWidth: 2,
-		borderColor: "white",
+		borderColor: COLORS.FEINT_LINES,
 		marginBottom: 10,
 	},
 	iconDiv: {

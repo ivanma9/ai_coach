@@ -11,7 +11,6 @@ const TreeMapComponent = ({
 	newNodes,
 }) => {
 	const padding = 100;
-	console.log(containerHeight - padding);
 	const panRef = useRef(null);
 
 	useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
 import TreeNode from "../components/TreeNode";
 
@@ -6,6 +6,11 @@ const HabitDeck = ({ navigation, route }) => {
 	const { habits } = route.params;
 
 	const [firstMessage, setFirstMessage] = useState("");
+
+	useEffect(() => {
+		console.log("habits in");
+		habits.forEach((c) => console.log(c));
+	}, []);
 
 	const handleMessageSubmit = async () => {
 		try {

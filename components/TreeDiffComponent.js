@@ -10,8 +10,6 @@ const TreeDiffComponent = ({ route, navigation }) => {
 
 	const windowWidth = useWindowDimensions().width;
 	const windowHeight = useWindowDimensions().height;
-	console.log(windowWidth);
-	console.log(windowHeight);
 
 	const onFadeComplete = () => {
 		console.log("CurrentTreeIndex: ", currentTreeIndex);
@@ -53,7 +51,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 		backgroundColor: "black",
 	},
-	// Define other styles as needed
 });
 
 export default TreeDiffComponent;
