@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
-import TreeNode from "../components/TreeNode";
+import { View, StyleSheet } from "react-native";
+import SwipeableViews from "react-swipeable-views";
+import { isThisTypeNode } from "typescript";
+import CardView from "../components/CardView";
+import { COLORS } from "../helpers/constants";
 
-const HabitDeck = ({ navigation, route }) => {
-	const { habits } = route.params;
+const HabitDeckPage = ({ navigation, route }) => {
+	const { habits, treeGraph } = route.params;
 
-	const [firstMessage, setFirstMessage] = useState("");
+	const [habit, setHabit] = useState(null);
+	const [index, setIndex] = useState(0);
+
+	const { grandparent, parent, child } = getBranch(tree, currentHabit);
 
 	useEffect(() => {
 		console.log("habits in");
@@ -22,13 +28,19 @@ const HabitDeck = ({ navigation, route }) => {
 		}
 	};
 
-	return <View style={styles.container}></View>;
+	return (
+		<View style={styles.container}>
+			<SwipeableViews index={index} onChangeIndex={setIndex(index)}>
+				<CardView habitName={index}></CardView>
+			</SwipeableViews>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "black",
+		backgroundColor: COLORS.BACKGROUND,
 		alignItems: "center",
 		justifyContent: "center",
 	},
@@ -49,4 +61,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default HabitDeck;
+export default HabitDeckPage;

@@ -14,21 +14,13 @@ import {
 import AntIcon from "react-native-vector-icons/AntDesign";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import FadeOutComponent from "../components/FadeOutComponent";
-import TreeGraphComponent from "../components/TreeGraphComponent";
 import TreeGraph from "../components/TreeGraph";
 import TreeNode from "../components/TreeNode";
 import json_data1 from "../data/data4.json";
-import json_data2 from "../data/data3.json";
 import { getTreeDiff, findDiffAndNewNodes } from "../helpers/getTreeDiff";
 import { getDataFromLocal } from "../helpers/getDataFromLocal";
 import { getHabits } from "../helpers/getHabits";
-import {
-	COLORS,
-	TREE_DELAY,
-	BOT_DELAY,
-	ROOT_NODE_DATA,
-} from "../helpers/constants";
+import { COLORS, ROOT_NODE_DATA } from "../helpers/constants";
 import { API_BASE_URL } from "../config";
 
 const ChatUI = ({ navigation }) => {
@@ -147,29 +139,29 @@ const ChatUI = ({ navigation }) => {
 	}, [treeGraphs]);
 
 	// This is for waiting to send the bot message
-	useEffect(() => {
-		console.log("treeDiffFound has been altered to ", treeDiffFound);
-		console.log("shouldBotRespond ->", shouldBotRespond);
-		if (treeDiffFound) {
-			navigation.navigate("TreeDiff", {
-				treeGraphs: treeGraphs,
-				newNodes: newTreeNodes,
-			});
-			setTreeDiffFound(false);
-			setNewTreeNodes([]);
-		}
-		// if (!treeDiffFound && shouldBotRespond) {
-		// 	console.log("Starting Time ---------");
-		// 	// Wait for 1 second (or any other delay you prefer) before sending the bot response
-		// 	const timer = setTimeout(() => {
-		// 		setShouldBotRespond(false); // Reset the flag
-		// 		sendBotResponse();
-		// 	}, BOT_DELAY);
+	// useEffect(() => {
+	// 	console.log("treeDiffFound has been altered to ", treeDiffFound);
+	// 	console.log("shouldBotRespond ->", shouldBotRespond);
+	// 	if (treeDiffFound) {
+	// 		navigation.navigate("TreeDiff", {
+	// 			treeGraphs: treeGraphs,
+	// 			newNodes: newTreeNodes,
+	// 		});
+	// 		setTreeDiffFound(false);
+	// 		setNewTreeNodes([]);
+	// 	}
+	// 	// if (!treeDiffFound && shouldBotRespond) {
+	// 	// 	console.log("Starting Time ---------");
+	// 	// 	// Wait for 1 second (or any other delay you prefer) before sending the bot response
+	// 	// 	const timer = setTimeout(() => {
+	// 	// 		setShouldBotRespond(false); // Reset the flag
+	// 	// 		sendBotResponse();
+	// 	// 	}, BOT_DELAY);
 
-		// 	// Cleanup the timer
-		// 	return () => clearTimeout(timer);
-		// }
-	}, [treeDiffFound, navigation]);
+	// 	// 	// Cleanup the timer
+	// 	// 	return () => clearTimeout(timer);
+	// 	// }
+	// }, [treeDiffFound, navigation]);
 
 	useEffect(() => {
 		navigation.setOptions({
