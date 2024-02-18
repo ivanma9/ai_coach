@@ -2,14 +2,17 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import AppNavigator from "./AppNavigator";
+import { HabitsProvider } from "./components/HabitsContext";
 
 export default function App() {
 	// Build the tree
 	return (
-		<NavigationContainer>
-			<AppNavigator />
-		</NavigationContainer>
-		// 	{/* <StatusBar style="auto" /> */}
+		<HabitsProvider>
+			<NavigationContainer>
+				<AppNavigator />
+			</NavigationContainer>
+			{/* <StatusBar style="auto" /> */}
+		</HabitsProvider>
 	);
 }
 

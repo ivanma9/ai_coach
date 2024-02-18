@@ -4,13 +4,11 @@ import {
 	Image,
 	Text,
 	TextInput,
-	Button,
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import icecube from "../assets/Ice_Cube.png";
-import TreeNode from "../components/TreeNode";
 import { COLORS } from "../helpers/constants";
 
 const InitialPage = ({ navigation }) => {
@@ -18,8 +16,7 @@ const InitialPage = ({ navigation }) => {
 
 	const handleMessageSubmit = async () => {
 		try {
-			treeGraph = await AsyncStorage.setItem("firstMessage", firstMessage);
-			console.log("to chat ui");
+			chatMsg = await AsyncStorage.setItem("firstMessage", firstMessage);
 			navigation.navigate("ChatUI");
 		} catch (error) {
 			console.error("Error:", error);

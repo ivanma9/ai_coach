@@ -167,7 +167,15 @@ const ChatUI = ({ navigation }) => {
 		navigation.setOptions({
 			headerRight: () => (
 				<TouchableOpacity
-					onPress={() => navigation.push("HabitDeckPage", { habits: habits })}
+					onPress={() => {
+						console.log(habits.length);
+						const currentTree = new TreeGraph(treeJsonData[0]);
+
+						navigation.push("HabitDeckPage", {
+							habits: habits,
+							tree: currentTree.tree,
+						});
+					}}
 				>
 					<Text style={{ color: COLORS.TEXT }}>Next</Text>
 				</TouchableOpacity>
@@ -337,6 +345,7 @@ const ChatUI = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<FlatList
+				showsVerticalScrollIndicator={true}
 				ref={this.scrollViewRefName}
 				data={messages}
 				renderItem={renderMessage}

@@ -1,6 +1,8 @@
 import TreeNode from "../components/TreeNode";
 
 export const getBranch = (tree: TreeNode, leaf: String) => {
+	console.log("tree", tree);
+	console.log("leaf", leaf);
 	let ancestors = [];
 	function findAncestors(root, target) {
 		if (!root) return false; // Base case: root is null

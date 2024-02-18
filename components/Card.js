@@ -1,48 +1,90 @@
-import React, { useEffect, useRef } from "react";
-import { Animated, View, TouchableOpacity, Text, Keyboard } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { View, TouchableOpacity, Text, Keyboard } from "react-native";
 import { COLORS } from "../helpers/constants";
+import AntIcon from "react-native-vector-icons/AntDesign";
+import HabitsContext from "./HabitsContext";
 
-const Card = ({ title, content }) => {
+const Card = ({ title, id, content, size }) => {
+	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
+	const [starred, setStarred] = useState(false);
+
 	useEffect(() => {
+		setStarred(starredHabits.includes(id));
 		return () => {};
 	}, []);
 
+	const selectStar = () => {
+		toggleStarredStatus(id);
+		setStarred(!starred);
+		console.log("starredHabits TOGGLE", starredHabits);
+	};
+
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>{title}</Text>
+			<Text style={[styles.title, { fontSize: 30 * size }]}>{title}</Text>
 			<View style={styles.content}>
-				<Text>{content}</Text>
+				<Text style={[styles.contextText, { fontSize: 20 * size }]}>
+					{content} content
+				</Text>
 			</View>
-			<TouchableOpacity activeOpacity={1}>
-				{/* <Icon></Icon> */}
-			</TouchableOpacity>
+			<View style={styles.buttons}>
+				<TouchableOpacity style={styles.starButton} onPressIn={selectStar}>
+					<AntIcon
+						name={starred ? "star" : "staro"}
+						size={30}
+						color={COLORS.STAR}
+						style={{ opacity: starred ? 1 : 0.7 }}
+					/>
+				</TouchableOpacity>
+			</View>
 		</View>
 	);
 };
 
-// // You can define your styles here
 const styles = {
-	// In your FadeOutExample styles
 	container: {
-		flex: 1,
+		// flex: 1,
+		width: "100%",
+		height: "100%",
+		borderRadius: 25,
 		alignItems: "center",
-		background: COLORS.SURFACE,
-		flexDirection: "column",
+		// backgroundColor: COLORS.SURFACE,
+		// flexDirection: "column",
 	},
 	title: {
 		color: COLORS.TEXT,
-		fontSize: 30,
-		top: 30,
-		padding: 20,
+		top: 10,
+		padding: 5,
 	},
 	content: {
-		flex: 1,
+		width: "80%",
+		height: "60%",
+		marginTop: 40,
+		marginBottom: 40,
 		padding: 20,
-		justifyContent: "center",
+		backgroundColor: COLORS.SURFACE,
+		borderRadius: 10,
 	},
 	contextText: {
 		color: COLORS.TEXT,
-		fontSize: 20,
+	},
+	buttons: {
+		flex: 1,
+		justifyContent: "flex-end",
+		alignSelf: "stretch",
+		width: "100%",
+		// backgroundColor: COLORS.TEST,
+	},
+	starButton: {
+		position: "absolute",
+		left: 10,
+		bottom: 30,
+		width: 55,
+		height: 55,
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: COLORS.SURFACE_30,
+		borderRadius: 50,
 	},
 };
 
