@@ -41,8 +41,10 @@ const HabitDeckPage = ({ navigation, route }) => {
 	}, []);
 
 	const submitStarredHabits = () => {
-		navigation.navigate("ChatUI", {
+		// navigation.navigate("InitialPage");
+		navigation.navigate("ResultsPage", {
 			habits: habits,
+			tree: tree,
 		});
 	};
 
@@ -86,7 +88,7 @@ const HabitDeckPage = ({ navigation, route }) => {
 				carouselRef={this._sliderRef}
 				tappableDots={!!this._sliderRef}
 			/>
-			<TouchableOpacity onPress={() => submitStarredHabits}>
+			<TouchableOpacity onPress={submitStarredHabits}>
 				<View style={styles.submit}>
 					<Text style={styles.submitText}>Finish</Text>
 				</View>
@@ -111,21 +113,16 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	text: {
-		color: "white",
-		marginBottom: 80,
-	},
 	slider: {
-		marginTop: 15,
-		overflow: "visiblem", // for custom animations
+		marginTop: 10,
+		overflow: "visible", // for custom animations
 	},
 	sliderContentContainer: {
 		paddingVertical: 10, // for custom animation
 	},
 	paginationContainer: {
-		paddingTop: 8,
+		paddingTop: 15,
 		paddingBottom: 20,
-		marginVertical: 20,
 	},
 	paginationDot: {
 		width: 10,

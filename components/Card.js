@@ -4,19 +4,18 @@ import { COLORS } from "../helpers/constants";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import HabitsContext from "./HabitsContext";
 
-const Card = ({ title, id, content, size }) => {
+const Card = ({ title, content, size }) => {
 	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
 	const [starred, setStarred] = useState(false);
 
 	useEffect(() => {
-		setStarred(starredHabits.includes(id));
+		setStarred(starredHabits.includes(title));
 		return () => {};
 	}, []);
 
 	const selectStar = () => {
-		toggleStarredStatus(id);
+		toggleStarredStatus(title);
 		setStarred(!starred);
-		console.log("starredHabits TOGGLE", starredHabits);
 	};
 
 	return (

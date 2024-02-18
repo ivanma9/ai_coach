@@ -4,6 +4,7 @@ import InitialPage from "./pages/InitialPage"; // Update with the correct path
 import ChatUI from "./pages/ChatUI"; // Update with the correct path
 import TreeDiffComponent from "./components/TreeDiffComponent";
 import HabitDeckPage from "./pages/HabitDeckPage";
+import StarredHabitsPage from "./pages/StarredHabitsPage";
 // import ResultsPage from "./pages/ResultsPage"; // Update with the correct path
 
 const Stack = createNativeStackNavigator();
@@ -57,7 +58,20 @@ function AppNavigator({ navigation }) {
 				}}
 				component={HabitDeckPage}
 			/>
-			{/* <Stack.Screen name="ResultsPage" component={ResultsPage} /> */}
+			<Stack.Screen
+				name="ResultsPage"
+				options={{
+					title: "Habits",
+					headerMode: "float",
+					headerShadowVisible: "true",
+					headerStyle: {
+						backgroundColor: "black",
+					},
+					headerTintColor: "white",
+					headerBackVisible: false,
+				}}
+				component={StarredHabitsPage}
+			/>
 		</Stack.Navigator>
 	);
 }

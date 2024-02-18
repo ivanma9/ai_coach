@@ -10,9 +10,9 @@ export const HabitsProvider = ({ children }) => {
 	useEffect(() => {
 		// Load starred habits from AsyncStorage when the app loads
 		const loadStarredHabits = async () => {
-			const habits = await AsyncStorage.getItem("starredHabits");
-			if (habits) {
-				setStarredHabits(JSON.parse(habits));
+			const habitsStarred = await AsyncStorage.getItem("starredHabits");
+			if (habitsStarred) {
+				setStarredHabits(JSON.parse(habitsStarred));
 			}
 		};
 		loadStarredHabits();
