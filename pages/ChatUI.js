@@ -22,6 +22,7 @@ import { getDataFromLocal } from "../helpers/getDataFromLocal";
 import { getHabits } from "../helpers/getHabits";
 import { COLORS, ROOT_NODE_DATA } from "../helpers/constants";
 import { API_BASE_URL } from "../config";
+import TreeGraphComponent from "../components/TreeGraphComponent";
 
 const ChatUI = ({ navigation }) => {
 	// Messages is a log of all messages sent by user and BOT
@@ -294,6 +295,7 @@ const ChatUI = ({ navigation }) => {
 			} else {
 				console.error("No Tree found from server");
 			}
+
 			if (data.response) setBotTextData(data.response);
 			else {
 				console.error("No response text found from server");
