@@ -23,6 +23,7 @@ import { getHabits } from "../helpers/getHabits";
 import { COLORS, ROOT_NODE_DATA } from "../helpers/constants";
 import { API_BASE_URL } from "../config";
 import TreeGraphComponent from "../components/TreeGraphComponent";
+import { renderMessage } from "../components/MessageComponents";
 
 const ChatUI = ({ navigation }) => {
 	// Messages is a log of all messages sent by user and BOT
@@ -210,6 +211,7 @@ const ChatUI = ({ navigation }) => {
 			text: currentMessage,
 			sender: "user", // You can set the sender as 'user'
 			timestamp: new Date().toISOString(),
+			type: "text",
 		};
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
 		setCurrentMessage(""); //Clears current message
@@ -318,31 +320,70 @@ const ChatUI = ({ navigation }) => {
 			text: botTextData,
 			sender: "bot", // You can set the sender as 'bot'
 			timestamp: new Date().toISOString(),
+			type: "text",
+		};
+		const imageMessage = {
+			id: messages.length + 2,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "image",
+			bug: "Dabug",
+		};
+		const responseMessage1 = {
+			id: messages.length + 1,
+			text: botTextData,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "text",
+		};
+		const imageMessage2 = {
+			id: messages.length + 3,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "image",
+			bug: "Abug",
+		};
+		const responseMessage2 = {
+			id: messages.length + 1,
+			text: botTextData,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "text",
+		};
+		const imageMessage3 = {
+			id: messages.length + 2,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "image",
+			bug: "SBug",
+		};
+		const responseMessage3 = {
+			id: messages.length + 1,
+			text: botTextData,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "text",
+		};
+		const imageMessage4 = {
+			id: messages.length + 3,
+			sender: "bot", // You can set the sender as 'bot'
+			timestamp: new Date().toISOString(),
+			type: "image",
+			bug: "Bigbug",
 		};
 		console.log("Response:" + messages.length);
-		setMessages((prevMessages) => [...prevMessages, responseMessage]);
+		setMessages((prevMessages) => [
+			...prevMessages,
+			responseMessage,
+			imageMessage,
+			responseMessage1,
+			imageMessage2,
+			responseMessage2,
+			imageMessage3,
+			responseMessage3,
+			imageMessage4,
+		]);
 	};
-
-	const renderMessage = ({ item }) => (
-		<View
-			style={[
-				styles.message,
-				{
-					alignSelf: item.sender === "user" ? "flex-end" : "flex-start",
-					backgroundColor:
-						item.sender === "user" ? COLORS.USER_BUBBLE : COLORS.SURFACE,
-				},
-			]}
-		>
-			<Text
-				style={{
-					color: item.sender === "user" ? COLORS.USER_TEXT : COLORS.TEXT,
-				}}
-			>
-				{item.text}
-			</Text>
-		</View>
-	);
 
 	return (
 		<View style={styles.container}>
