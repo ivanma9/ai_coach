@@ -1,23 +1,14 @@
 import { COLORS } from "../helpers/constants";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
+import { StyleSheet, Pressable, View, useWindowDimensions } from "react-native";
 import Card from "./Card";
 import { getBranch } from "../helpers/getBranch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const Grandparent = ({ grandparent }) => {
-	if (grandparent === undefined) {
-		return null;
-	}
-	return (
-		<View style={styles.grandparent}>
-			<Card
-				title={grandparent.data}
-				size={0.8}
-				content={grandparent.data}
-			></Card>
-		</View>
-	);
-};
+enum CardType {
+	Grandparent = "grandparent",
+	Parent = "parent",
+}
+
 const CardView = ({ habit, tree }) => {
 	console.log("----------------------HABIT");
 	console.log(habit);
@@ -27,6 +18,13 @@ const CardView = ({ habit, tree }) => {
 	const grandparent = ancestors[ancestors.length - 3];
 	const parent = ancestors[ancestors.length - 2];
 	const child = ancestors[ancestors.length - 1];
+
+	const [grandparentStyle, setGrandparentStyle] = useState({
+		width: "80%",
+		height: 60,
+	});
+
+	const [parentStyle, setParentStyle] = useState({ width: "90%", height: 60 });
 
 	// useEffect(async () => {
 	// 	const habitsIn = await AsyncStorage.getItem("starredHabits");
@@ -40,6 +38,16 @@ const CardView = ({ habit, tree }) => {
 	// 	);
 	// }, []);
 
+	const adjustedHeight = 200;
+	const onCardSelect = (cardType: CardType) => {
+		if (cardType === CardType.Grandparent) {
+			setGrandparentStyle({ width: "100%", height: adjustedHeight });
+		}
+		if (cardType === CardType.Parent) {
+			setParentStyle({ width: "100%", height: adjustedHeight });
+		}
+	};
+
 	return (
 		<View
 			style={{
@@ -50,11 +58,28 @@ const CardView = ({ habit, tree }) => {
 				height: "85%",
 			}}
 		>
-			<Grandparent grandparent={grandparent}></Grandparent>
-			<View style={styles.parent}>
+			{grandparent && (
+				<Pressable
+					style={styles.grandparent}
+					onPress={() => onCardSelect(CardType.Grandparent)}
+				>
+					<Card
+						title={grandparent.data}
+						size={0.9}
+						content={grandparent.data}
+					></Card>
+				</Pressable>
+			)}
+
+			{/* <Grandparent grandparent={grandparent}></Grandparent> */}
+			{/* { height: 60, width: "90%" } */}
+			<Pressable
+				style={styles.parent}
+				onPress={() => onCardSelect(CardType.Parent)}
+			>
 				<Card title={parent.data} size={0.9} content={parent.data}></Card>
-			</View>
-			<View style={styles.habitContainer}>
+			</Pressable>
+			<View style={[styles.habitContainer, { width: "100%", height: "100%" }]}>
 				<Card title={child.data} size={1.0} content={child.data}></Card>
 			</View>
 		</View>
@@ -63,22 +88,17 @@ const CardView = ({ habit, tree }) => {
 const styles = StyleSheet.create({
 	grandparent: {
 		backgroundColor: COLORS.SURFACE1,
-		height: 60,
-		width: "80%",
 		borderColor: "black",
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
 	parent: {
 		backgroundColor: COLORS.SURFACE2,
-		height: 60,
-		width: "90%",
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
 	habitContainer: {
 		backgroundColor: COLORS.SURFACE3,
-		width: "100%",
 		borderRadius: 25,
 	},
 	text: {

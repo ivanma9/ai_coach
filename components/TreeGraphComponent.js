@@ -1,6 +1,6 @@
 import React from "react";
 import Svg, { G, Line } from "react-native-svg";
-import { COLORS, TREE_NODE } from "../helpers/constants";
+import { COLORS, TREE_MAP, TREE_NODE } from "../helpers/constants";
 import TreeNodeComponent from "./TreeNodeComponent";
 
 const TreeGraphComponent = ({
@@ -10,7 +10,7 @@ const TreeGraphComponent = ({
 	newNodes,
 }) => {
 	const calculateTreeLayout = (rootNode, containerWidth, containerHeight) => {
-		const levelHeight = 400;
+		const levelHeight = TREE_MAP.LEVEL_HEIGHT;
 		const nodeRadius = 50;
 		const positions = new Map();
 
