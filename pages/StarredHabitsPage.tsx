@@ -16,63 +16,65 @@ import { COLORS } from "../helpers/constants";
 import { getHabitTreeNode } from "../helpers/getHabitTreeNode";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import Expandable from "../components/Expandable";
 
-const ExpandableContainer = ({ children, expanded }) => {
-	const [height, setHeight] = useState(0);
-	const animatedStyle = useAnimatedStyle(() => {
-		const animatedHeight = expanded ? withTiming(height) : withTiming(0);
-		return {
-			height: animatedHeight,
-		};
-	});
-
-	const onLayout = (event: LayoutChangeEvent) => {
-		console.log(height);
-		const layoutHeight = event.nativeEvent.layout.height;
-		console.log(layoutHeight);
-		if (layoutHeight > 0 && layoutHeight !== height) {
-			setHeight(layoutHeight);
-		}
-	};
-	return (
-		<Animated.View
-			style={[
-				animatedStyle,
-				{
-					overflow: "hidden",
-					alignItems: "center",
-				},
-			]}
-		>
-			<View onLayout={onLayout} style={styles.body}>
-				{children}
-			</View>
-		</Animated.View>
-	);
-};
-
-const Item = ({ title, description, starred }) => {
-	const [expanded, setExpanded] = useState(false);
+const Item = ({ title, description, rating, id }) => {
+	let titleColor = COLORS.SURFACE;
+	let outlinedStarColor = COLORS.STAR;
+	if (id === 0) {
+		titleColor = COLORS.FIRST;
+		// outlinedStarColor = COLORS.SURFACE;
+	}
+	if (id === 1) {
+		titleColor = COLORS.SECOND;
+		// outlinedStarColor = COLORS.SURFACE;
+	}
+	if (id === 2) {
+		titleColor = COLORS.THIRD;
+		// outlinedStarColor = COLORS.SURFACE;
+	}
 
 	return (
-		<Pressable onPress={() => setExpanded(!expanded)}>
-			<View style={styles.titleContainer}>
-				<View style={styles.star}>
-					<AntIcon
-						name={starred ? "star" : "staro"}
-						size={20}
-						color={COLORS.STAR}
-						style={{ opacity: starred ? 1 : 0.7 }}
-					/>
+		<Expandable width={"100%"} expandedHeight={"60%"}>
+			<View
+				style={[
+					styles.titleContainer,
+					{
+						backgroundColor: COLORS.SURFACE,
+						borderWidth: 1,
+						borderColor: titleColor,
+					},
+				]}
+			>
+				<View style={styles.rating}>
+					{/* Filled Stars */}
+					{[...Array(rating)].map((_, index) => (
+						<AntIcon
+							key={index}
+							name={rating !== 0 ? "star" : "staro"}
+							size={20}
+							color={COLORS.STAR}
+							style={{ opacity: rating !== 0 ? 1 : 0.7 }}
+						/>
+					))}
+					{/* Blank stars */}
+					{[...Array(5 - rating)].map((_, index) => (
+						<AntIcon
+							key={index}
+							name={"staro"}
+							size={20}
+							color={outlinedStarColor}
+							style={{ opacity: 0.7 }}
+						/>
+					))}
 				</View>
-				<Text style={styles.title}>{title}</Text>
+				<Text style={[styles.title, { color: COLORS.TEXT }]}>{title}</Text>
 			</View>
-			{expanded && (
-				<ExpandableContainer expanded={expanded}>
-					<Text style={styles.description}>{description}</Text>
-				</ExpandableContainer>
-			)}
-		</Pressable>
+			{/* Content */}
+			<View style={styles.body}>
+				<Text style={styles.description}>{description}</Text>
+			</View>
+		</Expandable>
 	);
 };
 
@@ -81,28 +83,19 @@ const StarredHabitsPage = ({ navigation, route }) => {
 	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
 	const allHabitNodes = habits.map((habit) => [
 		getHabitTreeNode(tree, habit),
-		false,
+		0,
 	]);
-	const starredHabitNodes = starredHabits.map((habit) => [
-		getHabitTreeNode(tree, habit),
-		true,
-	]);
-
-	useEffect(() => {
-		// starredhabits compare to route.params habits
-	});
 
 	const sortHabits = () => {
-		console.log(starredHabits);
-		console.log(starredHabitNodes);
-		const unStarredHabitNodes = allHabitNodes.filter(
-			(habit) => !starredHabits.includes(habit[0].data)
-		);
-
-		console.log("UNSTAR");
-		console.log(unStarredHabitNodes);
-		unStarredHabitNodes.forEach((e) => console.log(e[0].data));
-		return [...starredHabitNodes, ...unStarredHabitNodes];
+		return allHabitNodes
+			.map((habitNode) => {
+				console.log(habitNode);
+				console.log(habitNode[0].data);
+				return starredHabits[habitNode[0].data]
+					? [habitNode[0], starredHabits[habitNode[0].data]]
+					: habitNode;
+			})
+			.sort((node1, node2) => node2[1] - node1[1]);
 	};
 	const sortedHabitNodes =
 		habits && habits.length > 0 ? sortHabits() : allHabitNodes;
@@ -113,11 +106,12 @@ const StarredHabitsPage = ({ navigation, route }) => {
 				sortedHabitNodes.map((item, index) => (
 					<Item
 						key={index}
+						id={index}
 						title={item[0].data}
 						description={item[0].data.concat(
 							" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
 						)}
-						starred={item[1]}
+						rating={item[1]}
 					/>
 				))
 			) : (
@@ -143,10 +137,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	star: {
+	rating: {
+		flexDirection: "row",
 		alignItems: "center",
 		marginVertical: 5,
-		marginHorizontal: 20,
+		marginLeft: 6,
+		marginRight: 15,
 		justifyContent: "center",
 	},
 	title: {
@@ -158,8 +154,8 @@ const styles = StyleSheet.create({
 	body: {
 		backgroundColor: COLORS.SURFACE2,
 		marginHorizontal: 20,
-		// padding: 10,
-		position: "absolute",
+		padding: 10,
+		height: 300,
 	},
 	description: {
 		fontSize: 16,

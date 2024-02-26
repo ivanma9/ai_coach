@@ -25,6 +25,7 @@ export const HabitsProvider = ({ children }) => {
 		else updatedStarredHabits[habitId] = rating;
 
 		setStarredHabits(updatedStarredHabits);
+
 		await AsyncStorage.setItem(
 			"starredHabits",
 			JSON.stringify(updatedStarredHabits)

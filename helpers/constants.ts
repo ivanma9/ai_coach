@@ -24,6 +24,10 @@ const COLORS = {
 
 	STAR: "#C4B000",
 
+	FIRST: "#897129",
+	SECOND: "#7b7b7b",
+	THIRD: "#855325",
+
 	FEINT_LINES: "#b3b3b3",
 	BORDER: "#FFFFFF",
 	TEST: "#14FF9D91",
