@@ -4,38 +4,47 @@ import { COLORS } from "../helpers/constants";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import HabitsContext from "./HabitsContext";
 
-const Card = ({ title, content, size }) => {
+const Card = ({ title, content, size, isHabit = true }) => {
 	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
-	const [starred, setStarred] = useState(false);
+	const [selectedStars, setSelectedStars] = useState(0);
 
 	useEffect(() => {
-		setStarred(starredHabits.includes(title));
-		return () => {};
+		const stars = starredHabits[title] || 0;
+		setSelectedStars(stars);
 	}, []);
 
-	const selectStar = () => {
-		toggleStarredStatus(title);
-		setStarred(!starred);
+	const handleStarPress = (index) => {
+		const newRating = selectedStars === index + 1 ? 0 : index + 1;
+
+		toggleStarredStatus(title, newRating);
+		setSelectedStars(newRating);
 	};
 
 	return (
 		<View style={styles.container}>
-			<Text style={[styles.title, { fontSize: 30 * size }]}>{title}</Text>
 			<View style={styles.content}>
 				<Text style={[styles.contextText, { fontSize: 20 * size }]}>
 					{content} content
 				</Text>
 			</View>
-			<View style={styles.buttons}>
-				<TouchableOpacity style={styles.starButton} onPressIn={selectStar}>
-					<AntIcon
-						name={starred ? "star" : "staro"}
-						size={30}
-						color={COLORS.STAR}
-						style={{ opacity: starred ? 1 : 0.7 }}
-					/>
-				</TouchableOpacity>
-			</View>
+			{isHabit && (
+				<View style={styles.buttons}>
+					{[...Array(5)].map((_, index) => (
+						<TouchableOpacity
+							key={index}
+							style={styles.starButton}
+							onPressIn={() => handleStarPress(index)}
+						>
+							<AntIcon
+								name={selectedStars > index ? "star" : "staro"}
+								size={30}
+								color={COLORS.STAR}
+								style={{ opacity: selectedStars > index ? 1 : 0.7 }}
+							/>
+						</TouchableOpacity>
+					))}
+				</View>
+			)}
 		</View>
 	);
 };
@@ -50,16 +59,11 @@ const styles = {
 		// backgroundColor: COLORS.SURFACE,
 		// flexDirection: "column",
 	},
-	title: {
-		color: COLORS.TEXT,
-		top: 10,
-		padding: 5,
-	},
 	content: {
 		width: "80%",
 		height: "60%",
 		marginTop: 40,
-		marginBottom: 40,
+		marginBottom: 10,
 		padding: 20,
 		backgroundColor: COLORS.SURFACE,
 		borderRadius: 10,
@@ -68,16 +72,17 @@ const styles = {
 		color: COLORS.TEXT,
 	},
 	buttons: {
-		flex: 1,
-		justifyContent: "flex-end",
-		alignSelf: "stretch",
-		width: "100%",
-		// backgroundColor: COLORS.TEST,
+		justifyContent: "center",
+		flexDirection: "row",
+		height: 55,
+		borderRadius: 50,
+
+		backgroundColor: COLORS.SURFACE_30,
 	},
 	starButton: {
-		position: "absolute",
-		left: 10,
-		bottom: 30,
+		// left: 10,
+		// bottom: 70,
+		marginHorizontal: 0,
 		width: 55,
 		height: 55,
 		alignItems: "center",

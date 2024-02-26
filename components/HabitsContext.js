@@ -18,13 +18,12 @@ export const HabitsProvider = ({ children }) => {
 		loadStarredHabits();
 	}, []);
 
-	const toggleStarredStatus = async (habitId) => {
-		let updatedStarredHabits = [];
-		if (starredHabits.includes(habitId)) {
-			updatedStarredHabits = starredHabits.filter((id) => id !== habitId);
-		} else {
-			updatedStarredHabits = [...starredHabits, habitId];
-		}
+	const toggleStarredStatus = async (habitId, rating) => {
+		let updatedStarredHabits = { ...starredHabits };
+
+		if (rating === 0) delete updatedStarredHabits[habitId];
+		else updatedStarredHabits[habitId] = rating;
+
 		setStarredHabits(updatedStarredHabits);
 		await AsyncStorage.setItem(
 			"starredHabits",

@@ -15,6 +15,7 @@ import HabitsContext from "../components/HabitsContext";
 import { COLORS } from "../helpers/constants";
 import { getHabitTreeNode } from "../helpers/getHabitTreeNode";
 import AntIcon from "react-native-vector-icons/AntDesign";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const ExpandableContainer = ({ children, expanded }) => {
 	const [height, setHeight] = useState(0);
@@ -103,20 +104,31 @@ const StarredHabitsPage = ({ navigation, route }) => {
 		unStarredHabitNodes.forEach((e) => console.log(e[0].data));
 		return [...starredHabitNodes, ...unStarredHabitNodes];
 	};
-	const sortedHabitNodes = sortHabits();
+	const sortedHabitNodes =
+		habits && habits.length > 0 ? sortHabits() : allHabitNodes;
 
 	return (
 		<ScrollView style={{ backgroundColor: COLORS.BACKGROUND }}>
-			{sortedHabitNodes.map((item, index) => (
-				<Item
-					key={index}
-					title={item[0].data}
-					description={item[0].data.concat(
-						" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
-					)}
-					starred={item[1]}
-				/>
-			))}
+			{sortedHabitNodes.length > 0 ? (
+				sortedHabitNodes.map((item, index) => (
+					<Item
+						key={index}
+						title={item[0].data}
+						description={item[0].data.concat(
+							" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
+						)}
+						starred={item[1]}
+					/>
+				))
+			) : (
+				<View
+					style={{ alignItems: "center", justifyContent: "center", top: 200 }}
+				>
+					<Text style={{ color: COLORS.TEXT, fontSize: 30 }}>
+						No habits available
+					</Text>
+				</View>
+			)}
 		</ScrollView>
 	);
 };

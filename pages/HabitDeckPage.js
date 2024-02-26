@@ -56,38 +56,54 @@ const HabitDeckPage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
-			<Carousel
-				ref={(c) => (_sliderRef = c)}
-				data={habits}
-				renderItem={_renderItem}
-				sliderWidth={windowWidth}
-				itemWidth={itemWidth}
-				hasParallaxImages={true}
-				firstItem={1}
-				inactiveSlideScale={0.94}
-				inactiveSlideOpacity={0.7}
-				// inactiveSlideShift={20}
-				containerCustomStyle={styles.slider}
-				contentContainerCustomStyle={styles.sliderContentContainer}
-				loop={true}
-				loopClonesPerSide={2}
-				// autoplay={true}
-				// autoplayDelay={500}
-				// autoplayInterval={5000}
-				onSnapToItem={(index) => setActiveSlide(index)}
-			/>
-			<Pagination
-				dotsLength={habits.length}
-				activeDotIndex={activeSlide}
-				containerStyle={styles.paginationContainer}
-				dotColor={"rgba(255, 255, 255, 0.92)"}
-				dotStyle={styles.paginationDot}
-				inactiveDotColor={COLORS.FEINT_TEXT}
-				inactiveDotOpacity={0.4}
-				inactiveDotScale={0.6}
-				carouselRef={this._sliderRef}
-				tappableDots={!!this._sliderRef}
-			/>
+			{habits && habits.length > 0 ? (
+				<>
+					<Carousel
+						ref={(c) => (_sliderRef = c)}
+						data={habits}
+						renderItem={_renderItem}
+						sliderWidth={windowWidth}
+						itemWidth={itemWidth}
+						hasParallaxImages={true}
+						firstItem={1}
+						inactiveSlideScale={0.94}
+						inactiveSlideOpacity={0.7}
+						// inactiveSlideShift={20}
+						containerCustomStyle={styles.slider}
+						contentContainerCustomStyle={styles.sliderContentContainer}
+						loop={true}
+						loopClonesPerSide={2}
+						// autoplay={true}
+						// autoplayDelay={500}
+						// autoplayInterval={5000}
+						onSnapToItem={(index) => setActiveSlide(index)}
+					/>
+					<Pagination
+						dotsLength={habits.length}
+						activeDotIndex={activeSlide}
+						containerStyle={styles.paginationContainer}
+						dotColor={"rgba(255, 255, 255, 0.92)"}
+						dotStyle={styles.paginationDot}
+						inactiveDotColor={COLORS.FEINT_TEXT}
+						inactiveDotOpacity={0.4}
+						inactiveDotScale={0.6}
+						carouselRef={this._sliderRef}
+						tappableDots={!!this._sliderRef}
+					/>
+				</>
+			) : (
+				<View
+					style={{
+						alignItems: "center",
+						justifyContent: "center",
+						bottom: 150,
+					}}
+				>
+					<Text style={{ color: COLORS.TEXT, fontSize: 30 }}>
+						No habits available
+					</Text>
+				</View>
+			)}
 			<TouchableOpacity onPress={submitStarredHabits}>
 				<View style={styles.submit}>
 					<Text style={styles.submitText}>Finish</Text>
@@ -116,6 +132,7 @@ const styles = StyleSheet.create({
 	slider: {
 		marginTop: 10,
 		overflow: "visible", // for custom animations
+		marginBottom: 10,
 	},
 	sliderContentContainer: {
 		paddingVertical: 10, // for custom animation

@@ -283,7 +283,7 @@ const ChatUI = ({ navigation }) => {
 
 			// data is server data
 			const data = {
-				// tree: getDataFromLocal(json_data1),
+				tree: getDataFromLocal(json_data1),
 				response: "Konichiwa",
 				svgurl: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"

@@ -1,8 +1,16 @@
 import { COLORS } from "../helpers/constants";
-import { StyleSheet, Pressable, View, useWindowDimensions } from "react-native";
+import {
+	StyleSheet,
+	Pressable,
+	Text,
+	View,
+	useWindowDimensions,
+} from "react-native";
 import Card from "./Card";
 import { getBranch } from "../helpers/getBranch";
 import { useEffect, useState } from "react";
+import { MotiView } from "moti";
+import Expandable from "./Expandable";
 
 enum CardType {
 	Grandparent = "grandparent",
@@ -38,16 +46,6 @@ const CardView = ({ habit, tree }) => {
 	// 	);
 	// }, []);
 
-	const adjustedHeight = 200;
-	const onCardSelect = (cardType: CardType) => {
-		if (cardType === CardType.Grandparent) {
-			setGrandparentStyle({ width: "100%", height: adjustedHeight });
-		}
-		if (cardType === CardType.Parent) {
-			setParentStyle({ width: "100%", height: adjustedHeight });
-		}
-	};
-
 	return (
 		<View
 			style={{
@@ -59,28 +57,46 @@ const CardView = ({ habit, tree }) => {
 			}}
 		>
 			{grandparent && (
-				<Pressable
-					style={styles.grandparent}
-					onPress={() => onCardSelect(CardType.Grandparent)}
-				>
-					<Card
-						title={grandparent.data}
-						size={0.9}
-						content={grandparent.data}
-					></Card>
-				</Pressable>
+				<Expandable width={"80%"}>
+					<View style={[styles.grandparent, styles.headerComponent]}>
+						<Text style={[styles.cardTitle, { fontSize: 30 * 0.8 }]}>
+							{grandparent.data}
+						</Text>
+					</View>
+					<View style={styles.grandparent}>
+						<Card
+							title={grandparent.data}
+							size={0.9}
+							content={grandparent.data}
+							isHabit={false}
+						></Card>
+					</View>
+				</Expandable>
 			)}
+			<Expandable width={"90%"}>
+				<View style={[styles.parent, styles.headerComponent]}>
+					<Text style={[styles.cardTitle, { fontSize: 30 * 0.9 }]}>
+						{parent.data}
+					</Text>
+				</View>
+				<View style={styles.parent}>
+					<Card
+						title={parent.data}
+						size={0.9}
+						content={parent.data}
+						isHabit={false}
+					></Card>
+				</View>
+			</Expandable>
 
-			{/* <Grandparent grandparent={grandparent}></Grandparent> */}
-			{/* { height: 60, width: "90%" } */}
-			<Pressable
-				style={styles.parent}
-				onPress={() => onCardSelect(CardType.Parent)}
-			>
-				<Card title={parent.data} size={0.9} content={parent.data}></Card>
-			</Pressable>
 			<View style={[styles.habitContainer, { width: "100%", height: "100%" }]}>
-				<Card title={child.data} size={1.0} content={child.data}></Card>
+				<Text style={[styles.cardTitle, { fontSize: 30 }]}>{child.data}</Text>
+				<Card
+					title={child.data}
+					size={1.0}
+					content={child.data}
+					isHabit={true}
+				></Card>
 			</View>
 		</View>
 	);
@@ -88,23 +104,25 @@ const CardView = ({ habit, tree }) => {
 const styles = StyleSheet.create({
 	grandparent: {
 		backgroundColor: COLORS.SURFACE1,
-		borderColor: "black",
-		borderTopLeftRadius: 25,
-		borderTopRightRadius: 25,
 	},
 	parent: {
 		backgroundColor: COLORS.SURFACE2,
-		borderTopLeftRadius: 25,
-		borderTopRightRadius: 25,
 	},
 	habitContainer: {
 		backgroundColor: COLORS.SURFACE3,
+		alignItems: "center",
 		borderRadius: 25,
 	},
-	text: {
-		// flex: 1,
-		color: "white",
-		marginBottom: 80,
+	headerComponent: {
+		borderTopLeftRadius: 25,
+		borderTopRightRadius: 25,
+		height: 60,
+		alignItems: "center",
+	},
+	cardTitle: {
+		color: COLORS.TEXT,
+		top: 10,
+		padding: 5,
 	},
 });
 export default CardView;
