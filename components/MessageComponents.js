@@ -1,11 +1,9 @@
-import { View, Text, ActivityIndicator } from "react-native";
-import Dabug from "../assets/tree00.svg";
-import Abug from "../assets/tree30.svg";
-import Big from "../assets/bigTreeauto.svg";
-import Small from "../assets/smallTreeAuto.svg";
-import { MotiView } from "moti";
+import { View, Text, StyleSheet } from "react-native";
+import { AnimatePresence, MotiView, useAnimationState } from "moti";
+import { SvgXml } from "react-native-svg";
 
 import { MESSAGE_TYPES, MESSAGE, COLORS } from "../helpers/constants";
+import { useState } from "react";
 
 const TextMessage = ({ message }) => (
 	<Text
@@ -16,8 +14,33 @@ const TextMessage = ({ message }) => (
 		{message.text}
 	</Text>
 );
+const LoadingRing = ({ width, height }) => {
+	return (
+		<View style={styles.container}>
+			<MotiView
+				from={{ rotate: "0deg" }}
+				animate={{ rotate: "360deg" }}
+				transition={{
+					type: "timing",
+					duration: 2000,
+					loop: true,
+					repeatReverse: false,
+				}}
+				style={[
+					{
+						width: width,
+						height: height,
+						borderRadius: width / 2,
+						borderWidth: width / 8,
+					},
+					styles.ring,
+				]}
+			/>
+		</View>
+	);
+};
 
-const LoadingRing = ({ size }) => (
+const LoadingDialateRing = ({ size }) => (
 	<MotiView
 		from={{
 			width: size,
@@ -51,44 +74,68 @@ const LoadingRing = ({ size }) => (
 	/>
 );
 
-// <LoadingRing />
+const useFadeIn = () => {
+	return useAnimationState({
+		from: {
+			opacity: 0,
+		},
+		to: {
+			opacity: 1,
+		},
+	});
+};
 
-const ImageMessage = ({ bug }) => {
-	switch (bug.bug) {
-		case "Dabug":
-			return (
-				<View
-					style={{
-						backgroundColor: COLORS.TEST,
-						alignItems: "center",
-						justifyContent: "center",
-					}}
-				>
-					{/* <LoadingRing size={40} /> */}
-					<Dabug
-						width={MESSAGE.IMAGE_WIDTH * 0.4 * 2}
-						height={MESSAGE.IMAGE_HEIGHT * 0.6 * 2}
-						style={{ backgroundColor: COLORS.SURFACE }}
-					/>
-				</View>
-			);
-		case "Abug":
-			return <Abug width={MESSAGE.IMAGE_WIDTH} height={MESSAGE.IMAGE_HEIGHT} />;
-		case "Bigbug":
-			return (
-				<Big
-					width={MESSAGE.IMAGE_WIDTH * 1.5}
-					height={MESSAGE.IMAGE_HEIGHT * 1.5}
+const useFadeOut = () => {
+	return useAnimationState({
+		from: {
+			opacity: 1,
+		},
+		to: {
+			opacity: 0,
+		},
+	});
+};
+
+// const FadeInComponent = () => {
+// 	const fadeInState = useFadeIn();
+
+// 	return <MotiView state={fadeInState} />;
+// };
+
+const ImageMessage = ({ svgurl }) => {
+	const [loading, setLoading] = useState(true);
+	const fadeInState = useFadeIn();
+
+	sampleLoadtime = setTimeout(() => {
+		setLoading(false);
+	}, 1000);
+	return (
+		<AnimatePresence
+			exitBeforeEnter
+			style={{
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<MotiView
+				key="newtree"
+				state={fadeInState}
+				transition={{
+					type: "timing",
+					duration: 2000,
+				}}
+				exit={{
+					opacity: 0,
+				}}
+			>
+				<SvgXml
+					xml={svgurl}
+					width={MESSAGE.IMAGE_WIDTH * 0.4 * 2}
+					height={MESSAGE.IMAGE_HEIGHT * 0.6 * 2}
 				/>
-			);
-		case "SBug":
-			return (
-				<Small width={MESSAGE.IMAGE_WIDTH} height={MESSAGE.IMAGE_HEIGHT} />
-			);
-
-		default:
-			return null;
-	}
+			</MotiView>
+		</AnimatePresence>
+	);
 };
 
 const renderMessageComponent = (message) => {
@@ -96,7 +143,10 @@ const renderMessageComponent = (message) => {
 		case MESSAGE_TYPES.TEXT:
 			return <TextMessage message={message} />;
 		case MESSAGE_TYPES.IMAGE:
-			return <ImageMessage bug={message} />;
+			return <ImageMessage svgurl={message.svgurl} />;
+		case MESSAGE_TYPES.LOAD:
+			console.log("Loading ....");
+			return <LoadingRing width={35} height={35} />;
 		default:
 			return null; // Fallback for unknown message types
 	}
@@ -111,11 +161,29 @@ export const renderMessage = ({ item }) => (
 			borderWidth: 2,
 			borderColor: COLORS.FEINT_LINES,
 			marginBottom: 10,
-			alignSelf: item.sender === "user" ? "flex-end" : "flex-start",
+			alignSelf:
+				item.sender === MESSAGE.SENDER.USER ? "flex-end" : "flex-start",
 			backgroundColor:
-				item.sender === "user" ? COLORS.USER_BUBBLE : COLORS.SURFACE,
+				item.sender === MESSAGE.SENDER.USER
+					? COLORS.USER_BUBBLE
+					: COLORS.SURFACE,
 		}}
 	>
 		{renderMessageComponent(item)}
 	</View>
 );
+
+const styles = StyleSheet.create({
+	container: {
+		// position: "absolute",
+		justifyContent: "center",
+		alignItems: "center",
+		// zIndex: 2,
+	},
+	ring: {
+		borderColor: "#ffffff",
+		borderRightColor: "transparent",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+});

@@ -6,6 +6,7 @@ import { HabitsProvider } from "./components/HabitsContext";
 
 export default function App() {
 	// Build the tree
+
 	return (
 		<HabitsProvider>
 			<NavigationContainer>

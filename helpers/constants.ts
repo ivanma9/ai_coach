@@ -1,5 +1,8 @@
 const TREE_DELAY: Number = 15000;
 const BOT_DELAY: Number = 1000;
+const DELAY = {
+	LOADING: 5000,
+};
 const COLORS = {
 	ICON_COLOR: "#FFFFFFAB",
 	LINE_STROKE: "#FFFFFF56",
@@ -48,15 +51,21 @@ const ROOT_NODE_DATA = "Self-Improvement";
 const MESSAGE_TYPES = {
 	TEXT: "text",
 	IMAGE: "image",
+	LOAD: "load",
 };
 
 const MESSAGE = {
 	IMAGE_WIDTH: ((300 * 2) / 3) * 0.85,
 	IMAGE_HEIGHT: ((300 * 2) / 3) * 0.85,
+	SENDER: {
+		USER: "user",
+		BOT: "bot",
+	},
 };
 
 export {
 	TREE_DELAY,
+	DELAY,
 	COLORS,
 	BOT_DELAY,
 	TREE_NODE,
