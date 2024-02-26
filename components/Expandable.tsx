@@ -21,6 +21,7 @@ const Expandable = ({
 	return (
 		<Pressable
 			onPress={toggleExpansion}
+			onLongPress={toggleExpansion}
 			style={[{ width: width }, styles.container]}
 		>
 			{headerComponent}

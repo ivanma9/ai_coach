@@ -101,29 +101,32 @@ const StarredHabitsPage = ({ navigation, route }) => {
 		habits && habits.length > 0 ? sortHabits() : allHabitNodes;
 
 	return (
-		<ScrollView style={{ backgroundColor: COLORS.BACKGROUND }}>
-			{sortedHabitNodes.length > 0 ? (
-				sortedHabitNodes.map((item, index) => (
-					<Item
-						key={index}
-						id={index}
-						title={item[0].data}
-						description={item[0].data.concat(
-							" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
-						)}
-						rating={item[1]}
-					/>
-				))
-			) : (
-				<View
-					style={{ alignItems: "center", justifyContent: "center", top: 200 }}
-				>
-					<Text style={{ color: COLORS.TEXT, fontSize: 30 }}>
-						No habits available
-					</Text>
-				</View>
-			)}
-		</ScrollView>
+		<>
+			<View>{/* Profile info */}</View>
+			<ScrollView style={{ backgroundColor: COLORS.BACKGROUND }}>
+				{sortedHabitNodes.length > 0 ? (
+					sortedHabitNodes.map((item, index) => (
+						<Item
+							key={index}
+							id={index}
+							title={item[0].data}
+							description={item[0].data.concat(
+								" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
+							)}
+							rating={item[1]}
+						/>
+					))
+				) : (
+					<View
+						style={{ alignItems: "center", justifyContent: "center", top: 200 }}
+					>
+						<Text style={{ color: COLORS.TEXT, fontSize: 30 }}>
+							No habits available
+						</Text>
+					</View>
+				)}
+			</ScrollView>
+		</>
 	);
 };
 
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: 5,
 		marginHorizontal: 20,
-		// borderRadius: 5,
+		borderRadius: 5,
 		backgroundColor: COLORS.SURFACE2,
 		flexDirection: "row",
 		alignItems: "center",
