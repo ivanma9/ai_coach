@@ -77,8 +77,6 @@ const ChatUI = ({ navigation }) => {
 				setMessages([userMessage, loadMessage]);
 
 				getAIServer(userMessage);
-
-				// INCLUDE  the tree diffs[[]]
 			})
 			.catch((e) => {
 				console.log("no first message retrieved");
@@ -172,9 +170,6 @@ const ChatUI = ({ navigation }) => {
 		// SEND a POST to server and get a response
 		// variables effected: botTextData and treeJsonData
 		getAIServer(newMessage);
-
-		//Tree Diff function
-		// const originalData = getDataFromLocal(json_data1);
 	};
 
 	const getAIServer = async (messagePayload) => {
@@ -498,7 +493,6 @@ Stretch</title>
 					currentTreeGraph.tree,
 					newTreeGraph.tree
 				);
-				// const treeDiffs = getTreeDiff(currentTreeGraph.tree, newTreeGraph.tree);
 				setTreeJsonData(updatedTreeJsonData);
 				console.log("diff");
 				console.log(treeDiffs.length);
