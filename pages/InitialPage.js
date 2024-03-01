@@ -16,7 +16,7 @@ const InitialPage = ({ navigation }) => {
 
 	const handleMessageSubmit = async () => {
 		try {
-			chatMsg = await AsyncStorage.setItem("firstMessage", firstMessage);
+			const chatMsg = await AsyncStorage.setItem("firstMessage", firstMessage);
 			navigation.navigate("ChatUI");
 		} catch (error) {
 			console.error("Error:", error);

@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 
 import AntIcon from "react-native-vector-icons/AntDesign";
 import Ionicon from "react-native-vector-icons/Ionicons";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TreeGraph from "../components/TreeGraph";
 import TreeNode from "../components/TreeNode";
@@ -38,11 +39,10 @@ const ChatUI = ({ navigation }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [isAtBottom, setIsAtBottom] = useState(true);
 	const [treeDiffFound, setTreeDiffFound] = useState(false);
-	const [treeGraphs, setTreeGraphs] = useState([
-		new TreeNode(ROOT_NODE_DATA, []),
-	]);
+	// const [treeGraphs, setTreeGraphs] = useState([
+	// 	new TreeNode(ROOT_NODE_DATA, []),
+	// ]);
 	const [habits, setHabits] = useState([]);
-	const [shouldBotRespond, setShouldBotRespond] = useState(false);
 	// treeJsonData[current, new]
 	const [treeJsonData, setTreeJsonData] = useState([
 		JSON.parse('{"children": [], "data": "Self-Improvement"}'),
@@ -53,7 +53,7 @@ const ChatUI = ({ navigation }) => {
 	const [svgurl, setSvgUrl] = useState("");
 	const [newTreeNodes, setNewTreeNodes] = useState([]);
 
-	this.scrollViewRefName = useRef();
+	const scrollViewRefName = useRef();
 
 	useEffect(() => {
 		console.log("INITIAL MOUNT.....");
@@ -135,15 +135,9 @@ const ChatUI = ({ navigation }) => {
 		messages.forEach((msg) => {
 			console.log(msg);
 		});
-		// if (
-		// 	messages.length > 0 &&
-		// 	messages[messages.length - 1].type === MESSAGE_TYPES.LOAD
-		// )
-		// setTimeout(() => {
-		// 	console.log("5 sec");
-		// getAIServer(messages[messages.length - 1]);
-		// }, DELAY.LOADING);
-		if (!isAtBottom) scrollToBottom();
+		setTimeout(() => {
+			scrollToBottom();
+		}, 20);
 	}, [messages]); // add Botreponses as a dependency later
 
 	useEffect(() => {
@@ -151,18 +145,18 @@ const ChatUI = ({ navigation }) => {
 		scrollToBottom();
 	}, [botTextData]);
 
-	useEffect(() => {
-		const currentJsonData = treeJsonData[0];
-		const newJsonData = treeJsonData[1];
-		isJsonString(currentJsonData)
-			? console.log("ReRENDER Current tree JSON:", currentJsonData)
-			: console.log("ReRENDER BAD JSON", currentJsonData);
-		isJsonString(newJsonData)
-			? console.log("ReRENDER New tree JSON:", newJsonData)
-			: console.log("ReRENDER BAD JSON", newJsonData);
-	}, [treeGraphs]);
+	// useEffect(() => {
+	// 	const currentJsonData = treeJsonData[0];
+	// 	const newJsonData = treeJsonData[1];
+	// 	isJsonString(currentJsonData)
+	// 		? console.log("ReRENDER Current tree JSON:", currentJsonData)
+	// 		: console.log("ReRENDER BAD JSON", currentJsonData);
+	// 	isJsonString(newJsonData)
+	// 		? console.log("ReRENDER New tree JSON:", newJsonData)
+	// 		: console.log("ReRENDER BAD JSON", newJsonData);
+	// }, [treeGraphs]);
 
-	// This is for waiting to send the bot message
+	// This is for waiting to send the bot message based off treeDiffFound
 	// useEffect(() => {
 	// 	console.log("treeDiffFound has been altered to ", treeDiffFound);
 	// 	console.log("shouldBotRespond ->", shouldBotRespond);
@@ -190,19 +184,27 @@ const ChatUI = ({ navigation }) => {
 	useEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
-				<TouchableOpacity
+				<Pressable
 					onPress={() => {
 						console.log(habits.length);
 						const currentTree = new TreeGraph(treeJsonData[0]);
+						const newTree = new TreeGraph(treeJsonData[1]);
 
 						navigation.push("HabitDeckPage", {
 							habits: habits,
-							tree: currentTree.tree,
+							tree: newTree.tree,
 						});
 					}}
+					style={styles.headerNext}
 				>
-					<Text style={{ color: COLORS.TEXT }}>Next</Text>
-				</TouchableOpacity>
+					<MaterialIcon
+						name={"check"}
+						size={35}
+						color={COLORS.ICON_COLOR}
+						margin={0}
+						padding={0}
+					/>
+				</Pressable>
 			),
 		});
 	}, [habits]);
@@ -219,7 +221,7 @@ const ChatUI = ({ navigation }) => {
 	};
 
 	const scrollToBottom = () => {
-		scrollViewRefName.current.scrollToEnd();
+		scrollViewRefName.current.scrollToEnd({ animated: true });
 		setIsAtBottom(true);
 	};
 
@@ -263,8 +265,8 @@ const ChatUI = ({ navigation }) => {
 			message: messagePayload.text,
 		};
 		try {
-			console.log(`${API_BASE_URL}/api/conversation/start`);
-			console.log("----Sending over -----", messagePL);
+			// console.log(`${API_BASE_URL}/api/conversation/start`);
+			// console.log("----Sending over -----", messagePL);
 
 			// const response = await fetch(`${API_BASE_URL}/api/conversation/start`, {
 			// 	method: "POST",
@@ -278,8 +280,10 @@ const ChatUI = ({ navigation }) => {
 			// 	throw new Error("Network Error");
 			// }
 			// const data = await response.json();
-			//sample timer
-			setTimeout(() => {}, 5000);
+
+			//sample timer to test loading
+			const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+			await delay(2000);
 
 			// data is server data
 			const data = {
@@ -583,18 +587,17 @@ Stretch</title>
 				});
 				setNewTreeNodes(newNodes);
 
-				//setting treeGraphs for those treeDiffs if exists
-				const isTreeDifferent = treeDiffs && treeDiffs.length > 0;
-				if (isTreeDifferent) {
-					console.log("Setting tree graphs...");
-					setTreeGraphs(() => [
-						currentTreeGraph.tree,
-						newTreeGraph.tree,
-						...treeDiffs,
-					]); // setTreeGraphs to treeDiffs
-					setTreeDiffFound(true); // Triggers animation of Fade Tree
-					// setShouldBotRespond(true); // Ensures bot should respond after treeDiffFound is False
-				}
+				// //setting treeGraphs for those treeDiffs if exists
+				// const isTreeDifferent = treeDiffs && treeDiffs.length > 0;
+				// if (isTreeDifferent) {
+				// 	console.log("Setting tree graphs...");
+				// 	setTreeGraphs(() => [
+				// 		currentTreeGraph.tree,
+				// 		newTreeGraph.tree,
+				// 		...treeDiffs,
+				// 	]); // setTreeGraphs to treeDiffs
+				// 	setTreeDiffFound(true); // Triggers animation of Fade Tree
+				// }
 			} else {
 				console.log("No Tree found from server");
 			} // endif data.tree
@@ -615,8 +618,6 @@ Stretch</title>
 					console.error("No response text found from server");
 				}
 			}
-
-			// Receiving optional svg if new tree comes in
 		} catch (error) {
 			console.error("There was a problem fetching the message:", error);
 			setBotTextData(
@@ -729,10 +730,11 @@ Stretch</title>
 			style={styles.container}
 			keyboardVerticalOffset={100}
 			behavior={Platform.OS === "ios" ? "padding" : "padding"}
+			onLayout={scrollToBottom}
 		>
 			<FlatList
 				showsVerticalScrollIndicator={true}
-				ref={this.scrollViewRefName}
+				ref={scrollViewRefName}
 				data={messages}
 				renderItem={renderMessage}
 				keyExtractor={(item, index) => index.toString()}
@@ -754,7 +756,7 @@ Stretch</title>
 						onChangeText={setCurrentMessage}
 						placeholder="Type a message..."
 						placeholderTextColor="gray"
-						onTextInput={scrollToBottom}
+						// onFocus={scrollToBottom}
 					/>
 					<TouchableOpacity style={styles.send} onPress={sendMessage}>
 						<Ionicon
@@ -892,6 +894,10 @@ const styles = StyleSheet.create({
 		zIndex: 1,
 		bottom: 10,
 		right: "50%",
+	},
+	headerNext: {
+		flexDirection: "row",
+		alignItems: "center",
 	},
 	send: {
 		justifyContent: "center",

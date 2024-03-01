@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity, Text, Keyboard } from "react-native";
+import {
+	View,
+	TouchableOpacity,
+	Text,
+	Keyboard,
+	Pressable,
+} from "react-native";
 import { COLORS } from "../helpers/constants";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import HabitsContext from "./HabitsContext";
@@ -30,10 +36,11 @@ const Card = ({ title, content, size, isHabit = true }) => {
 			{isHabit && (
 				<View style={styles.buttons}>
 					{[...Array(5)].map((_, index) => (
-						<TouchableOpacity
+						<Pressable
 							key={index}
 							style={styles.starButton}
-							onPressIn={() => handleStarPress(index)}
+							onLongPress={() => handleStarPress(index)}
+							delayLongPress={200}
 						>
 							<AntIcon
 								name={selectedStars > index ? "star" : "staro"}
@@ -41,7 +48,7 @@ const Card = ({ title, content, size, isHabit = true }) => {
 								color={COLORS.STAR}
 								style={{ opacity: selectedStars > index ? 1 : 0.7 }}
 							/>
-						</TouchableOpacity>
+						</Pressable>
 					))}
 				</View>
 			)}

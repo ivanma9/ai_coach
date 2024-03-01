@@ -18,9 +18,6 @@ enum CardType {
 }
 
 const CardView = ({ habit, tree }) => {
-	console.log("----------------------HABIT");
-	console.log(habit);
-	const habitId = habit.index;
 	const windowWidth = useWindowDimensions().width;
 	const ancestors = getBranch(tree, habit.item);
 	const grandparent = ancestors[ancestors.length - 3];
@@ -34,31 +31,25 @@ const CardView = ({ habit, tree }) => {
 
 	const [parentStyle, setParentStyle] = useState({ width: "90%", height: 60 });
 
-	// useEffect(async () => {
-	// 	const habitsIn = await AsyncStorage.getItem("starredHabits");
-	// 	let updatedHabits = [];
-	// 	if (habitsIn) {
-	// 		updatedHabits = JSON.parse(habitsIn);
-	// 	}
-	// 	updatedHabits = await AsyncStorage.setItem(
-	// 		"habits",
-	// 		JSON.stringify(updatedHabits)
-	// 	);
-	// }, []);
-
 	return (
 		<View
 			style={{
 				width: windowWidth * 0.85,
 				backgroundColor: COLORS.BACKGROUND,
 				alignItems: "center",
-				padding: 20,
-				height: "85%",
+				paddingHorizontal: 20,
+				paddingTop: 5,
+				height: "77%",
 			}}
 		>
 			{grandparent && (
-				<Expandable width={"80%"}>
-					<View style={[styles.grandparent, styles.headerComponent]}>
+				<Expandable width={"80%"} expandedHeight={300 * 0.8}>
+					<View
+						style={[
+							{ backgroundColor: COLORS.SURFACE1 },
+							styles.headerComponent,
+						]}
+					>
 						<Text style={[styles.cardTitle, { fontSize: 30 * 0.8 }]}>
 							{grandparent.data}
 						</Text>
@@ -73,8 +64,10 @@ const CardView = ({ habit, tree }) => {
 					</View>
 				</Expandable>
 			)}
-			<Expandable width={"90%"}>
-				<View style={[styles.parent, styles.headerComponent]}>
+			<Expandable width={"90%"} expandedHeight={300 * 0.9}>
+				<View
+					style={[{ backgroundColor: COLORS.SURFACE2 }, styles.headerComponent]}
+				>
 					<Text style={[styles.cardTitle, { fontSize: 30 * 0.9 }]}>
 						{parent.data}
 					</Text>
@@ -104,9 +97,13 @@ const CardView = ({ habit, tree }) => {
 const styles = StyleSheet.create({
 	grandparent: {
 		backgroundColor: COLORS.SURFACE1,
+		borderBottomLeftRadius: 25,
+		borderBottomRightRadius: 25,
 	},
 	parent: {
 		backgroundColor: COLORS.SURFACE2,
+		borderBottomLeftRadius: 25,
+		borderBottomRightRadius: 25,
 	},
 	habitContainer: {
 		backgroundColor: COLORS.SURFACE3,

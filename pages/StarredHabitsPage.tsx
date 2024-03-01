@@ -35,13 +35,12 @@ const Item = ({ title, description, rating, id }) => {
 	}
 
 	return (
-		<Expandable width={"100%"} expandedHeight={"60%"}>
+		<Expandable width={"100%"} expandedHeight={300} curve={15}>
 			<View
 				style={[
 					styles.titleContainer,
 					{
 						backgroundColor: COLORS.SURFACE,
-						borderWidth: 1,
 						borderColor: titleColor,
 					},
 				]}
@@ -135,7 +134,9 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: 5,
 		marginHorizontal: 20,
-		borderRadius: 5,
+		borderWidth: 2,
+
+		borderRadius: 15,
 		backgroundColor: COLORS.SURFACE2,
 		flexDirection: "row",
 		alignItems: "center",
@@ -159,6 +160,8 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		padding: 10,
 		height: 300,
+		borderBottomLeftRadius: 15,
+		borderBottomRightRadius: 15,
 	},
 	description: {
 		fontSize: 16,

@@ -29,7 +29,7 @@ const HabitDeckPage = ({ navigation, route }) => {
 	// const [habit, setHabit] = useState(null);
 	const [index, setIndex] = useState(0);
 
-	this._sliderRef = useRef();
+	const _sliderRef = useRef(null);
 
 	// const { grandparent, parent, child } = getBranch(tree, currentHabit);
 
@@ -40,6 +40,17 @@ const HabitDeckPage = ({ navigation, route }) => {
 		habits.forEach((c) => console.log(c));
 	}, []);
 
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		// Navigate to the first item or the desired initial item
+	// 		_sliderRef.current?.snapToItem(
+	// 			0,
+	// 			(animated = false),
+	// 			(fireCallback = false)
+	// 		);
+	// 		return () => {};
+	// 	}, [])
+	// );
 	const submitStarredHabits = () => {
 		// navigation.navigate("InitialPage");
 		navigation.navigate("ResultsPage", {
@@ -59,12 +70,12 @@ const HabitDeckPage = ({ navigation, route }) => {
 			{habits && habits.length > 0 ? (
 				<>
 					<Carousel
-						ref={(c) => (_sliderRef = c)}
+						ref={_sliderRef}
 						data={habits}
 						renderItem={_renderItem}
 						sliderWidth={windowWidth}
 						itemWidth={itemWidth}
-						hasParallaxImages={true}
+						hasParallaxImages={false}
 						firstItem={1}
 						inactiveSlideScale={0.94}
 						inactiveSlideOpacity={0.7}
@@ -131,8 +142,9 @@ const styles = StyleSheet.create({
 	},
 	slider: {
 		marginTop: 10,
-		overflow: "visible", // for custom animations
+		// overflow: "visible", // for custom animations
 		marginBottom: 10,
+		backgroundColor: COLORS.BACKGROUND,
 	},
 	sliderContentContainer: {
 		paddingVertical: 10, // for custom animation

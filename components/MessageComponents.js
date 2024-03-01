@@ -22,7 +22,7 @@ const LoadingRing = ({ width, height }) => {
 				animate={{ rotate: "360deg" }}
 				transition={{
 					type: "timing",
-					duration: 2000,
+					duration: 1400,
 					loop: true,
 					repeatReverse: false,
 				}}
