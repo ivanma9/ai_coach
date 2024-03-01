@@ -39,9 +39,6 @@ const ChatUI = ({ navigation }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [isAtBottom, setIsAtBottom] = useState(true);
 	const [treeDiffFound, setTreeDiffFound] = useState(false);
-	// const [treeGraphs, setTreeGraphs] = useState([
-	// 	new TreeNode(ROOT_NODE_DATA, []),
-	// ]);
 	const [habits, setHabits] = useState([]);
 	// treeJsonData[current, new]
 	const [treeJsonData, setTreeJsonData] = useState([
@@ -86,44 +83,6 @@ const ChatUI = ({ navigation }) => {
 			.catch((e) => {
 				console.log("no first message retrieved");
 			});
-
-		//Tree Diff function
-		// const originalData = getDataFromLocal(json_data1);
-
-		//Change treeJsonData // need to restrict if no changes
-		// const currentJsonData = treeJsonData[0];
-		// const newJsonData = treeJsonData[1];
-		// isJsonString(currentJsonData)
-		// 	? console.log("Current tree JSON:", currentJsonData)
-		// 	: console.log("BAD JSON", currentJsonData);
-		// isJsonString(newJsonData)
-		// 	? console.log("New tree JSON:", newJsonData)
-		// 	: console.log("BAD JSON", newJsonData);
-		// const curParsedData = getDataFromLocal(currentJsonData); remove parsed
-		// // const newParsedData = getDataFromLocal(newJsonData);
-		// // const treeGraph1 = new TreeGraph(originalData);
-		// const currentTreeGraph = new TreeGraph(currentJsonData);
-		// const newTreeGraph = new TreeGraph(newJsonData);
-
-		// // List of TreeNode tree diffs
-		// const treeDiffs = getTreeDiff(currentTreeGraph.tree, newTreeGraph.tree);
-		// console.log("diff");
-		// console.log(treeDiffs.length);
-
-		// const isTreeDifferent = treeDiffs && treeDiffs.length > 0;
-
-		// if (isTreeDifferent) {
-		// 	console.log("Setting tree graphs...");
-		// 	setTreeGraphs(() => [
-		// 		currentTreeGraph.tree,
-		// 		newTreeGraph.tree,
-		// 		...treeDiffs,
-		// 	]); // setTreeGraphs to treeDiffs
-		// 	setTreeDiffFound(true); // Triggers animation of Fade Tree
-		// 	// setShouldBotRespond(true); // Ensures bot should respond after treeDiffFound is False
-		// }
-		// setTreeDiffFound(true); // Triggers animation of Fade Tree
-		// createTreeGraphs();
 	}, []);
 
 	useEffect(() => {
@@ -144,42 +103,6 @@ const ChatUI = ({ navigation }) => {
 		if (botTextData !== "") sendBotResponse();
 		scrollToBottom();
 	}, [botTextData]);
-
-	// useEffect(() => {
-	// 	const currentJsonData = treeJsonData[0];
-	// 	const newJsonData = treeJsonData[1];
-	// 	isJsonString(currentJsonData)
-	// 		? console.log("ReRENDER Current tree JSON:", currentJsonData)
-	// 		: console.log("ReRENDER BAD JSON", currentJsonData);
-	// 	isJsonString(newJsonData)
-	// 		? console.log("ReRENDER New tree JSON:", newJsonData)
-	// 		: console.log("ReRENDER BAD JSON", newJsonData);
-	// }, [treeGraphs]);
-
-	// This is for waiting to send the bot message based off treeDiffFound
-	// useEffect(() => {
-	// 	console.log("treeDiffFound has been altered to ", treeDiffFound);
-	// 	console.log("shouldBotRespond ->", shouldBotRespond);
-	// 	if (treeDiffFound) {
-	// 		navigation.navigate("TreeDiff", {
-	// 			treeGraphs: treeGraphs,
-	// 			newNodes: newTreeNodes,
-	// 		});
-	// 		setTreeDiffFound(false);
-	// 		setNewTreeNodes([]);
-	// 	}
-	// 	// if (!treeDiffFound && shouldBotRespond) {
-	// 	// 	console.log("Starting Time ---------");
-	// 	// 	// Wait for 1 second (or any other delay you prefer) before sending the bot response
-	// 	// 	const timer = setTimeout(() => {
-	// 	// 		setShouldBotRespond(false); // Reset the flag
-	// 	// 		sendBotResponse();
-	// 	// 	}, BOT_DELAY);
-
-	// 	// 	// Cleanup the timer
-	// 	// 	return () => clearTimeout(timer);
-	// 	// }
-	// }, [treeDiffFound, navigation]);
 
 	useEffect(() => {
 		navigation.setOptions({
@@ -586,18 +509,6 @@ Stretch</title>
 					console.log(data);
 				});
 				setNewTreeNodes(newNodes);
-
-				// //setting treeGraphs for those treeDiffs if exists
-				// const isTreeDifferent = treeDiffs && treeDiffs.length > 0;
-				// if (isTreeDifferent) {
-				// 	console.log("Setting tree graphs...");
-				// 	setTreeGraphs(() => [
-				// 		currentTreeGraph.tree,
-				// 		newTreeGraph.tree,
-				// 		...treeDiffs,
-				// 	]); // setTreeGraphs to treeDiffs
-				// 	setTreeDiffFound(true); // Triggers animation of Fade Tree
-				// }
 			} else {
 				console.log("No Tree found from server");
 			} // endif data.tree
@@ -767,75 +678,6 @@ Stretch</title>
 					</TouchableOpacity>
 				</View>
 			</View>
-			{/* {treeDiffFound && (
-		<View style={styles.container}>
-			<FlatList
-				ref={this.scrollViewRefName}
-				data={messages}
-				renderItem={renderMessage}
-				keyExtractor={(item, index) => index.toString()}
-				style={styles.messageList}
-				onScroll={handleScroll}
-			/>
-			<KeyboardAvoidingView
-				keyboardVerticalOffset={100}
-				behavior={Platform.OS === "ios" ? "padding" : "padding"}
-				style={styles.inputContainer}
-			>
-				<View style={styles.iconDiv}>
-					{!isAtBottom && (
-						<TouchableOpacity style={styles.icon} onPress={scrollToBottom}>
-							<AntIcon name="downcircleo" size={30} color="#FFFFFFAB" />
-						</TouchableOpacity>
-					)}
-				</View>
-				<View style={styles.inputSubContainer}>
-					<TextInput
-						style={styles.input}
-						value={currentMessage}
-						onChangeText={setCurrentMessage}
-						placeholder="Type a message..."
-						placeholderTextColor="gray"
-						onTextInput={scrollToBottom}
-					/>
-					<TouchableOpacity style={styles.send} onPress={sendMessage}>
-						<Ionicon
-							name={"arrow-up-circle"}
-							size={35}
-							color={COLORS.ICON_COLOR}
-						/>
-					</TouchableOpacity>
-				</View>
-			</KeyboardAvoidingView>
-			{treeDiffFound && (
-				<View
-					style={styles.treeDiffContainer}
-					onLayout={() => {
-						console.log("Length", treeGraphs.length);
-						console.log("Mount: ", treeGraphs);
-						console.log(treeGraphs[currentTreeIndex]);
-						// console.log(treeGraphs[currentTreeIndex]);
-					}}
-				>
-					<FadeOutComponent
-						onLayout={() => {
-							console.log("FADE onLayout---#", currentTreeIndex);
-						}}
-						key={`fadeOut-${currentTreeIndex}`}
-						component={() => (
-							<TreeGraphComponent
-								rootNode={treeGraphs[currentTreeIndex]}
-								containerWidth={windowWidth}
-								containerHeight={windowHeight}
-							/>
-						)}
-						index={currentTreeIndex}
-						onFadeComplete={onFadeComplete}
-					/>
-				</View>
-			)}
-		</View>
-			)} */}
 		</KeyboardAvoidingView>
 	);
 };
