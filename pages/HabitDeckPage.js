@@ -13,6 +13,8 @@ import Carousel, { Pagination } from "react-native-snap-carousel";
 
 const HabitDeckPage = ({ navigation, route }) => {
 	const { habits, tree } = route.params;
+	console.log("THE TREE", tree);
+	console.log("THE HABITS", habits);
 
 	const windowWidth = useWindowDimensions().width;
 	const wp = (percentage) => {

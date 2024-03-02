@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	ScrollView,
 	LayoutChangeEvent,
+	TouchableOpacity,
 } from "react-native";
 import Animated, {
 	useAnimatedStyle,
@@ -14,72 +15,14 @@ import Animated, {
 import HabitsContext from "../components/HabitsContext";
 import { COLORS } from "../helpers/constants";
 import { getHabitTreeNode } from "../helpers/getHabitTreeNode";
-import AntIcon from "react-native-vector-icons/AntDesign";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import Expandable from "../components/Expandable";
-
-const Item = ({ title, description, rating, id }) => {
-	let titleColor = COLORS.SURFACE;
-	let outlinedStarColor = COLORS.STAR;
-	if (id === 0) {
-		titleColor = COLORS.FIRST;
-		// outlinedStarColor = COLORS.SURFACE;
-	}
-	if (id === 1) {
-		titleColor = COLORS.SECOND;
-		// outlinedStarColor = COLORS.SURFACE;
-	}
-	if (id === 2) {
-		titleColor = COLORS.THIRD;
-		// outlinedStarColor = COLORS.SURFACE;
-	}
-
-	return (
-		<Expandable width={"100%"} expandedHeight={300} curve={15}>
-			<View
-				style={[
-					styles.titleContainer,
-					{
-						backgroundColor: COLORS.SURFACE,
-						borderColor: titleColor,
-					},
-				]}
-			>
-				<View style={styles.rating}>
-					{/* Filled Stars */}
-					{[...Array(rating)].map((_, index) => (
-						<AntIcon
-							key={index}
-							name={rating !== 0 ? "star" : "staro"}
-							size={20}
-							color={COLORS.STAR}
-							style={{ opacity: rating !== 0 ? 1 : 0.7 }}
-						/>
-					))}
-					{/* Blank stars */}
-					{[...Array(5 - rating)].map((_, index) => (
-						<AntIcon
-							key={index}
-							name={"staro"}
-							size={20}
-							color={outlinedStarColor}
-							style={{ opacity: 0.7 }}
-						/>
-					))}
-				</View>
-				<Text style={[styles.title, { color: COLORS.TEXT }]}>{title}</Text>
-			</View>
-			{/* Content */}
-			<View style={styles.body}>
-				<Text style={styles.description}>{description}</Text>
-			</View>
-		</Expandable>
-	);
-};
+import { useStore } from "../components/Store";
+import { RatingList } from "../components/RatingList";
 
 const StarredHabitsPage = ({ navigation, route }) => {
 	const { habits, tree } = route.params;
 	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
+	const addToList = useStore((state) => state.addToList);
+
 	const allHabitNodes = habits.map((habit) => [
 		getHabitTreeNode(tree, habit),
 		0,
@@ -99,74 +42,49 @@ const StarredHabitsPage = ({ navigation, route }) => {
 	const sortedHabitNodes =
 		habits && habits.length > 0 ? sortHabits() : allHabitNodes;
 
+	const handleSubmit = () => {
+		addToList({ planTitle: "Ayo chill", plan: sortedHabitNodes });
+
+		navigation.navigate("ChatUI");
+		// Also should be saving this Starred list in <finished lists>
+	};
+
 	return (
-		<>
+		<View style={{ flex: 1 }}>
 			<View>{/* Profile info */}</View>
-			<ScrollView style={{ backgroundColor: COLORS.BACKGROUND }}>
-				{sortedHabitNodes.length > 0 ? (
-					sortedHabitNodes.map((item, index) => (
-						<Item
-							key={index}
-							id={index}
-							title={item[0].data}
-							description={item[0].data.concat(
-								" content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity content TouchableOpacity"
-							)}
-							rating={item[1]}
-						/>
-					))
-				) : (
-					<View
-						style={{ alignItems: "center", justifyContent: "center", top: 200 }}
-					>
-						<Text style={{ color: COLORS.TEXT, fontSize: 30 }}>
-							No habits available
-						</Text>
-					</View>
-				)}
-			</ScrollView>
-		</>
+			<RatingList list={sortedHabitNodes} altText={"No habits found"} />
+			<TouchableOpacity onPress={handleSubmit} style={styles.to}>
+				<View style={styles.finishButton}>
+					<Text style={styles.submitText}>Finish</Text>
+				</View>
+			</TouchableOpacity>
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	titleContainer: {
-		padding: 10,
-		marginTop: 5,
-		marginHorizontal: 20,
-		borderWidth: 2,
-
-		borderRadius: 15,
-		backgroundColor: COLORS.SURFACE2,
-		flexDirection: "row",
-		alignItems: "center",
+	to: {
+		position: "absolute", // Position the button container absolutely to float above the ScrollView
+		bottom: 20, // Distance from the bottom of the screen
+		left: 0,
+		right: 0,
+		alignItems: "center", // Center the button horizontally
 	},
-	rating: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginVertical: 5,
-		marginLeft: 6,
-		marginRight: 15,
+	finishButton: {
+		alignItems: "center", // Center the button horizontally
 		justifyContent: "center",
+		height: 60,
+		width: 200,
+		borderRadius: 45,
+		borderWidth: 1,
+		backgroundColor: COLORS.SURFACE3,
+		marginBottom: 50,
+		zIndex: 2,
 	},
-	title: {
-		flex: 1,
+	submitText: {
+		color: COLORS.TEXT,
 		fontSize: 18,
 		fontWeight: "bold",
-		color: COLORS.TEXT,
-	},
-	body: {
-		backgroundColor: COLORS.SURFACE2,
-		marginHorizontal: 20,
-		padding: 10,
-		height: 300,
-		borderBottomLeftRadius: 15,
-		borderBottomRightRadius: 15,
-	},
-	description: {
-		fontSize: 16,
-		color: COLORS.TEXT,
-		margin: 10,
 	},
 });
 

@@ -6,6 +6,7 @@ import TreeDiffComponent from "./components/TreeDiffComponent";
 import HabitDeckPage from "./pages/HabitDeckPage";
 import StarredHabitsPage from "./pages/StarredHabitsPage";
 import LoginScreen from "./pages/LoginPage";
+import { ChatDrawer } from "./components/ChatDrawer";
 // import ResultsPage from "./pages/ResultsPage"; // Update with the correct path
 
 const Stack = createNativeStackNavigator();
@@ -26,16 +27,11 @@ function AppNavigator({ navigation }) {
 			<Stack.Screen
 				name="ChatUI"
 				options={{
-					title: "Coach",
-					headerMode: "float",
-					headerShadowVisible: "true",
-					headerStyle: {
-						backgroundColor: "black",
-					},
-					headerTintColor: "white",
-					headerBackVisible: false,
+					headerShown: false,
+					cardOverlayEnabled: true,
+					gestureEnabled: false,
 				}}
-				component={ChatUI}
+				component={ChatDrawer}
 			/>
 			<Stack.Screen
 				name="TreeDiff"

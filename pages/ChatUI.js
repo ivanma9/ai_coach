@@ -485,7 +485,8 @@ Stretch</title>
 				const currentTreeGraph = new TreeGraph(updatedTreeJsonData[0]);
 				const newTreeGraph = new TreeGraph(updatedTreeJsonData[1]);
 
-				// Compute habits from newTreeGraph
+				// Compute habits from newTreeGraph and the set new trees
+				setTreeJsonData(updatedTreeJsonData);
 				setHabits(getHabits(newTreeGraph.tree));
 
 				// List of TreeNode tree diffs and New Nodes
@@ -493,7 +494,6 @@ Stretch</title>
 					currentTreeGraph.tree,
 					newTreeGraph.tree
 				);
-				setTreeJsonData(updatedTreeJsonData);
 				console.log("diff");
 				console.log(treeDiffs.length);
 
