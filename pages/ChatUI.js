@@ -37,6 +37,8 @@ const ChatUI = ({ navigation }) => {
 	// Messages is a log of all messages sent by user and BOT
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState("");
+	const [isInputDisabled, setIsInputDisabled] = useState(false);
+
 	const [isAtBottom, setIsAtBottom] = useState(true);
 	const [treeDiffFound, setTreeDiffFound] = useState(false);
 	const [habits, setHabits] = useState([]);
@@ -146,7 +148,8 @@ const ChatUI = ({ navigation }) => {
 		setIsAtBottom(true);
 	};
 
-	const sendMessage = () => {
+	const sendMessage = async () => {
+		setIsInputDisabled(true);
 		if (currentMessage.trim() === "") {
 			return; // Don't send empty messages
 		}
@@ -169,7 +172,7 @@ const ChatUI = ({ navigation }) => {
 
 		// SEND a POST to server and get a response
 		// variables effected: botTextData and treeJsonData
-		getAIServer(newMessage);
+		await getAIServer(newMessage);
 	};
 
 	const getAIServer = async (messagePayload) => {
@@ -574,6 +577,7 @@ Stretch</title>
 		console.log("Response:" + messages.length);
 		// setMessages((prevMessages) => [...prevMessages, imageMessage]);
 		sendBotResponse(botResponse);
+		setIsInputDisabled(false);
 	};
 
 	const sendBotResponse = (botResponse) => {
@@ -615,6 +619,7 @@ Stretch</title>
 
 				return updatedMessages;
 			});
+			setIsInputDisabled(false);
 
 			// const responseMessage = {
 			// 	id: messages.length + 1,
@@ -661,9 +666,13 @@ Stretch</title>
 						onChangeText={setCurrentMessage}
 						placeholder="Type a message..."
 						placeholderTextColor="gray"
-						// onFocus={scrollToBottom}
+						editable={!isInputDisabled}
 					/>
-					<TouchableOpacity style={styles.send} onPress={sendMessage}>
+					<TouchableOpacity
+						style={styles.send}
+						onPress={sendMessage}
+						disabled={isInputDisabled}
+					>
 						<Ionicon
 							name={"arrow-up-circle"}
 							size={35}
