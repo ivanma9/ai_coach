@@ -704,7 +704,6 @@ const styles = StyleSheet.create({
 		bottom: 30,
 		left: 0,
 		right: 0,
-		// backgroundColor: "lightyellow", //test
 	},
 	inputSubContainer: {
 		flexDirection: "row",

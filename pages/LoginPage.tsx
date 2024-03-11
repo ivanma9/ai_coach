@@ -137,6 +137,15 @@ const Signup = ({ navigation }) => {
 	});
 	const [errors, setErrors] = useState<FormErrors>({});
 
+	//TODO:
+	const registerManualUser = async (email, password) => {
+		try {
+			// await auth().createUserWithEmailAndPassword(email, password);
+			console.log("User account created & signed in!");
+		} catch (error) {
+			console.error(error);
+		}
+	};
 	const validateForm = (): boolean => {
 		let isValid = true;
 		let newErrors: FormErrors = {};
