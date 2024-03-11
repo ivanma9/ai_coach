@@ -1,12 +1,12 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import InitialPage from "./pages/InitialPage"; // Update with the correct path
-import ChatUI from "./pages/ChatUI"; // Update with the correct path
 import TreeDiffComponent from "./components/TreeDiffComponent";
 import HabitDeckPage from "./pages/HabitDeckPage";
 import StarredHabitsPage from "./pages/StarredHabitsPage";
 import LoginScreen from "./pages/LoginPage";
 import { ChatDrawer } from "./components/ChatDrawer";
+import CurrentPlan from "./pages/CurrentPlan";
 // import ResultsPage from "./pages/ResultsPage"; // Update with the correct path
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +32,18 @@ function AppNavigator({ navigation }) {
 					gestureEnabled: false,
 				}}
 				component={ChatDrawer}
+			/>
+			<Stack.Screen
+				name="Plan"
+				options={{
+					headerMode: "float",
+					headerShadowVisible: "true",
+					headerStyle: {
+						backgroundColor: "black",
+					},
+					headerTintColor: "white",
+				}}
+				component={CurrentPlan}
 			/>
 			<Stack.Screen
 				name="TreeDiff"

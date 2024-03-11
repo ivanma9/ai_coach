@@ -27,10 +27,16 @@ const COLORS = {
 	FIRST: "#897129",
 	SECOND: "#7b7b7b",
 	THIRD: "#855325",
+	BLACK: "#000000",
+	ERROR: "#CF0000",
 
 	FEINT_LINES: "#b3b3b3",
 	BORDER: "#FFFFFF",
 	TEST: "#14FF9D91",
+};
+
+const FONT_SIZE = {
+	NOTIFICATION: 18,
 };
 
 const TREE_NODE = {
@@ -74,6 +80,7 @@ export {
 	BOT_DELAY,
 	TREE_NODE,
 	ROOT_NODE_DATA,
+	FONT_SIZE,
 	TREE_MAP,
 	MESSAGE_TYPES,
 	MESSAGE,

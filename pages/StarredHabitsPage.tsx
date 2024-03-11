@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
 	View,
 	Text,
@@ -17,11 +17,16 @@ import { COLORS } from "../helpers/constants";
 import { getHabitTreeNode } from "../helpers/getHabitTreeNode";
 import { useStore } from "../components/Store";
 import { RatingList } from "../components/RatingList";
+import Snackbar from "../components/Snackbar";
+import { sleep } from "../helpers/util";
 
 const StarredHabitsPage = ({ navigation, route }) => {
 	const { habits, tree } = route.params;
 	const { toggleStarredStatus, starredHabits } = useContext(HabitsContext);
 	const addToList = useStore((state) => state.addToList);
+	const [snackbarVisible, setSnackbarVisible] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const actionPerformedRef = useRef(false);
 
 	const allHabitNodes = habits.map((habit) => [
 		getHabitTreeNode(tree, habit),
@@ -42,11 +47,29 @@ const StarredHabitsPage = ({ navigation, route }) => {
 	const sortedHabitNodes =
 		habits && habits.length > 0 ? sortHabits() : allHabitNodes;
 
-	const handleSubmit = () => {
-		addToList({ planTitle: "Ayo chill", plan: sortedHabitNodes });
-
+	const handleSubmit = async () => {
+		if (actionPerformedRef.current) {
+			return;
+		}
+		addToList({ planTitle: "Ayo chill", plan: sortedHabitNodes }, (error) => {
+			if (error) {
+				// Set the Snackbar message to the error message and make it visible
+				setSnackbarMessage(`Failed to add plan item: ${error.message}`);
+				setSnackbarVisible(true);
+				// Optionally, hide the Snackbar after a few seconds
+				setTimeout(() => setSnackbarVisible(false), 3000);
+			} else {
+				console.log("snack");
+				// Set a success message and show the Snackbar
+				setSnackbarMessage("Plan item added successfully");
+			}
+		});
+		actionPerformedRef.current = true;
+		setSnackbarVisible(true);
+		await sleep(3000);
+		setSnackbarVisible(false);
+		await sleep(2000);
 		navigation.navigate("ChatUI");
-		// Also should be saving this Starred list in <finished lists>
 	};
 
 	return (
@@ -58,6 +81,9 @@ const StarredHabitsPage = ({ navigation, route }) => {
 					<Text style={styles.submitText}>Finish</Text>
 				</View>
 			</TouchableOpacity>
+			{snackbarVisible && (
+				<Snackbar message={snackbarMessage} visible={snackbarVisible} />
+			)}
 		</View>
 	);
 };
