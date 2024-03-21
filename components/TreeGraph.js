@@ -7,9 +7,9 @@ class TreeGraph {
 
 	buildTree(jsonData) {
 		const buildNode = (nodeData) => {
-			const { data, children } = nodeData;
+			const { data, data_short, children } = nodeData;
 			const childNodes = children ? children.map(buildNode) : [];
-			return new TreeNode(data, childNodes);
+			return new TreeNode(data, data_short, childNodes);
 		};
 		if (jsonData) {
 			const rootData = jsonData;

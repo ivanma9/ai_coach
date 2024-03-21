@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "MyTreeApp",
-		"slug": "MyTreeApp",
+		"name": "CoachAIApp",
+		"slug": "CoachAIApp",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/Logo.png",

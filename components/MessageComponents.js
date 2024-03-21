@@ -103,6 +103,7 @@ const useFadeOut = () => {
 // };
 
 const ImageMessage = ({ svgurl }) => {
+	console.log(svgurl);
 	const [loading, setLoading] = useState(true);
 	const fadeInState = useFadeIn();
 

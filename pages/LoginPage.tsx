@@ -109,13 +109,13 @@ const Login = ({ navigation }) => {
 				/>
 				{errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-				<TouchableHighlight onPress={handleMessageSubmit}>
+				<TouchableOpacity onPress={handleMessageSubmit}>
 					<View style={styles.loginButton}>
 						<Text style={{ color: COLORS.TEXT, fontWeight: "bold" }}>
 							Login
 						</Text>
 					</View>
-				</TouchableHighlight>
+				</TouchableOpacity>
 				{/* Implement your login logic */}
 				{/* <GoogleSigninButton
 				style={styles.googleButton}
@@ -249,13 +249,13 @@ const Signup = ({ navigation }) => {
 				/>
 				{errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-				<TouchableHighlight onPress={handleMessageSubmit}>
+				<TouchableOpacity onPress={handleMessageSubmit}>
 					<View style={styles.signUpButton}>
 						<Text style={{ color: COLORS.BLACK, fontWeight: "bold" }}>
 							Sign up
 						</Text>
 					</View>
-				</TouchableHighlight>
+				</TouchableOpacity>
 				{/* Implement your login logic */}
 				{/* <GoogleSigninButton
 				style={styles.googleButton}

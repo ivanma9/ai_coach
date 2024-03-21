@@ -51,12 +51,12 @@ const CardView = ({ habit, tree }) => {
 						]}
 					>
 						<Text style={[styles.cardTitle, { fontSize: 30 * 0.8 }]}>
-							{grandparent.data}
+							{grandparent.data_short}
 						</Text>
 					</View>
 					<View style={styles.grandparent}>
 						<Card
-							title={grandparent.data}
+							title={grandparent.data_short}
 							size={0.9}
 							content={grandparent.data}
 							isHabit={false}
@@ -69,12 +69,12 @@ const CardView = ({ habit, tree }) => {
 					style={[{ backgroundColor: COLORS.SURFACE2 }, styles.headerComponent]}
 				>
 					<Text style={[styles.cardTitle, { fontSize: 30 * 0.9 }]}>
-						{parent.data}
+						{parent.data_short}
 					</Text>
 				</View>
 				<View style={styles.parent}>
 					<Card
-						title={parent.data}
+						title={parent.data_short}
 						size={0.9}
 						content={parent.data}
 						isHabit={false}
@@ -83,9 +83,11 @@ const CardView = ({ habit, tree }) => {
 			</Expandable>
 
 			<View style={[styles.habitContainer, { width: "100%", height: "100%" }]}>
-				<Text style={[styles.cardTitle, { fontSize: 30 }]}>{child.data}</Text>
+				<Text style={[styles.cardTitle, { fontSize: 30 }]}>
+					{child.data_short}
+				</Text>
 				<Card
-					title={child.data}
+					title={child.data_short}
 					size={1.0}
 					content={child.data}
 					isHabit={true}
